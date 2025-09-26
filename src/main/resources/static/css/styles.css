@@ -1,0 +1,77 @@
+/* ================================
+   Global Styles
+   ================================ */
+
+/* Fullscreen video background */
+#bg-video {
+    position: fixed;
+    top: 0;
+    left: 0;
+    min-width: 100%;
+    min-height: 100%;
+    object-fit: cover;
+    z-index: -1;
+}
+
+/* ================================
+   Split Layout (Landing Page)
+   ================================ */
+.split-container {
+    display: flex;
+    width: 100%;       /* Full width */
+    height: 100vh;     /* Full height */
+    color: white;
+    margin: 0;
+    padding: 0;
+}
+
+.left-section {
+    flex: 1;
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.right-section {
+    flex: 1;
+    background: linear-gradient(to bottom, #c94f4f, #a83232);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* ================================
+   Custom Buttons
+   ================================ */
+.btn-custom {
+    background-color: #BAC8D3; /* Your requested color */
+    border: none;
+    padding: 15px 40px;
+    margin: 10px 0;
+    font-size: 18px;
+    font-weight: bold;
+    color: #000;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none; /* Remove underline if <a> */
+    display: inline-block;
+    text-align: center;
+}
+
+.btn-custom:hover {
+    background-color: #a1b0bd;
+    color: #fff;
+}
+
+/* ================================
+   Footer
+   ================================ */
+footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/defaultTemplate}">
+<head>
+    <title>Sign In Successful</title>
+</head>
+<body>
+<section layout:fragment="content" class="container mt-5 text-center">
+    <div class="alert alert-success">
+        <h3>Sign In Successful!</h3>
+        <p th:text="'Welcome back, ' + ${SignInModel.username} + '!'"></p>
+        <p>You are now signed in to BUSINESSNAME Food Delivery Service.</p>
+    </div>
+</section>
+</body>
+</html>

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="layouts/defaultTemplate">
+<head>
+    <title>Registration Successful</title>
+</head>
+<body>
+<section layout:fragment="content" class="container mt-5">
+    <div class="alert alert-success" role="alert">
+        <h3>Registration Successful!</h3>
+        <p th:text="'Welcome, ' + ${userModel.firstName} + ' ' + ${userModel.lastName} + '!'"></p>
+        <p>Your account has been created with the role: 
+           <strong th:text="${userModel.role}"></strong>.
+        </p>
+    </div>
+
+    <a th:href="@{/signin/}" class="btn btn-primary">Proceed to Login</a>
+</section>
+</body>
+</html>

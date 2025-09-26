@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/defaultTemplate}">
+<head>
+    <title>Sign In</title>
+</head>
+<body>
+<section layout:fragment="content" class="container mt-5" style="max-width: 400px;">
+    <h2 class="text-center mb-4">Sign In</h2>
+	
+	<div th:if="${loginError}" class="alert alert-danger text-center">
+	    <p th:text="${loginError}"></p>
+	</div>
+
+    <!-- Sign In Form -->
+    <form th:action="@{/signin/}" th:object="${signInModel}" method="post">
+
+        <!-- Username -->
+        <div class="form-group mb-3">
+            <label for="username" class="form-label">Username</label>
+            <input type="text" id="username" th:field="*{username}" class="form-control"/>
+            <div class="text-danger" th:if="${#fields.hasErrors('username')}"
+                 th:errors="*{username}"></div>
+        </div>
+
+        <!-- Password -->
+        <div class="form-group mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" id="password" th:field="*{password}" class="form-control"/>
+            <div class="text-danger" th:if="${#fields.hasErrors('password')}"
+                 th:errors="*{password}"></div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="d-grid">
+            <button type="submit" class="btn btn-primary">Sign In</button>
+        </div>
+    </form>
+
+    <!-- Link to Sign Up -->
+    <div class="text-center mt-3">
+        <p>Don’t have an account? <a th:href="@{/signup/}">Sign Up</a></p>
+    </div>
+</section>
+</body>
+</html>

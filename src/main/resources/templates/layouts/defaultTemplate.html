@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+	<head>
+	    <meta charset="UTF-8">
+	    <title th:text="${title}">BUSINESSNAME</title>
+	    <!-- Bootstrap 5 CSS -->
+	    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+	    <!-- Custom CSS -->
+	    <link rel="stylesheet" th:href="@{/css/styles.css}">
+	</head>
+
+<body>
+    <!-- Header from common.html -->
+	<!-- Show one or the other -->
+	<div th:if="${showNavbar}" th:replace="layouts/common :: header"></div>
+
+    <!-- Page content goes here -->
+    <main>
+        <section layout:fragment="content">
+            <!-- Default content -->
+            <h2>Welcome to BUSINESSNAME</h2>
+        </section>
+    </main>
+
+    <!-- Footer from common.html -->
+    <div th:replace="layouts/common :: footer"></div>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -54,6 +54,7 @@ public class SignInController {
         // Temporary hard-coded validation (replace with DB later)
         if ("testuser".equals(signInModel.getUsername()) && "Password123!".equals(signInModel.getPassword())) {
             model.addAttribute("username", signInModel.getUsername());
+            model.addAttribute("title", "Speed-E-Eats");
             return "signinSuccess";
         } else {
             model.addAttribute("loginError", "Invalid username or password.");

@@ -15,14 +15,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 
 @Controller
 public class MainController {
 
     @GetMapping("/")
-    public String mainPage(Model model) {
+    public String mainPage(Model model, HttpServletRequest request) {
     	
-    	model.addAttribute("showNavbar", Boolean.FALSE); // Attempts to hide the navbar from homepage
+    	boolean loggedIn = request.getSession().getAttribute("username") != null;
+    	
+    	model.addAttribute("headerTemplate", loggedIn ? "layouts/common-guest" : "layouts/common-user");    	
     	model.addAttribute("title", "Speed-E-Eats");
     	
         return "main";

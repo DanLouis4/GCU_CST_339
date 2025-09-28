@@ -1,3 +1,19 @@
+/**
+ * SignInController
+ * ----------------------------
+ * Handles Sign In functionality.
+ * 
+ * - GET "/signin" → Displays the login form.
+ * - POST "/signin" → Processes login submission.
+ *   * Uses Jakarta validation for form inputs.
+ *   * Checks against hardcoded test credentials:
+ *       username: testuser / password: Password123!
+ *   * On success → redirects to signinSuccess.html with welcome message.
+ *   * On failure → redisplays form with error message.
+ * 
+ * TODO: Replace hardcoded check with DB-driven authentication in future.
+ */
+
 package com.gcu.controller;
 
 import org.springframework.stereotype.Controller;

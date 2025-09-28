@@ -1,3 +1,21 @@
+/**
+ * SignUpController
+ * ----------------------------
+ * Handles user registration (Sign Up).
+ * 
+ * - GET "/signup" → Displays the registration form.
+ * - POST "/signup" → Validates and processes submitted form.
+ *   * Uses Jakarta validation annotations for required fields.
+ *   * Enforces rules: 
+ *       - username with no special characters
+ *       - email format must be valid
+ *       - password length 8–32 with at least one special character
+ *   * On success → shows signupSuccess.html confirmation.
+ *   * On validation errors → redisplays form with feedback messages.
+ * 
+ * TODO: Save new users to database once persistence layer is added.
+ */
+
 package com.gcu.controller;
 
 import org.springframework.stereotype.Controller;

@@ -1,3 +1,14 @@
+/**
+ * MainController
+ * ----------------------------
+ * Handles the root ("/") request.
+ * Displays the landing page (main.html) with BUSINESSNAME, logo, 
+ * and Sign In / Sign Up buttons.
+ * 
+ * No business logic yet — primarily for showing the homepage.
+ */
+
+
 package com.gcu.controller;
 
 import org.springframework.stereotype.Controller;

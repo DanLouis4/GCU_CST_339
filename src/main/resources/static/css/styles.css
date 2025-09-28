@@ -1,4 +1,22 @@
 /* ================================
+   Custom Font: Banco
+   ================================ */
+@font-face {
+    font-family: 'Banco';
+    font-weight: normal;
+    font-style: normal;
+    src: url('../fonts/Banco.woff2') format('woff2'),
+         url('../fonts/Banco.woff') format('woff'),
+         url('../fonts/Banco.ttf') format('truetype');
+}
+/* ================================
+   Helpers and testers
+   ================================ */
+.test-layout{
+	border: 1px dotted red;
+}
+
+/* ================================
    Global Layout
    ================================ */
 html, body {
@@ -39,7 +57,7 @@ main {
 
 .left-section {
     flex: 1;
-    background: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay */
+    background: rgba(0, 0, 0, 0.5);  /* Semi-transparent overlay */
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -59,7 +77,7 @@ main {
    Custom Buttons
    ================================ */
 .btn-custom {
-    background-color: #BAC8D3; /* Requested color */
+    background-color: #BAC8D3;
     border: none;
     padding: 15px 40px;
     margin: 10px 0;
@@ -69,7 +87,7 @@ main {
     text-transform: uppercase;
     cursor: pointer;
     transition: all 0.3s ease;
-    text-decoration: none; /* Remove underline for <a> */
+    text-decoration: none;
     display: inline-block;
     text-align: center;
 }
@@ -80,9 +98,14 @@ main {
 }
 
 /* ================================
-   Logo Placeholder
+   Logo
    ================================ */
-.logo-placeholder {
+ .nav-logo {
+       height: 35px;   /* adjust size */
+       width: auto;    /* keep aspect ratio */
+ }   
+   
+.logo{
     width: 150px;
     height: 150px;
     margin-top: 20px;
@@ -90,9 +113,15 @@ main {
     background: #f8f9fa;
     color: #000;
     font-weight: bold;
+    font-family: 'Banco', sans-serif; /* Banco font for logo */
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.banco{
+	font-weight: bold;
+	font-family: 'Banco', sans-serif
 }
 
 /* ================================

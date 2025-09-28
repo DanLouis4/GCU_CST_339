@@ -22,8 +22,8 @@ public class MainController {
     @GetMapping("/")
     public String mainPage(Model model) {
     	
-    	model.addAttribute("showNavbar", Boolean.FALSE);
-    	model.addAttribute("title", "BUSINESSSNAME");
+    	model.addAttribute("showNavbar", Boolean.FALSE); // Attempts to hide the navbar from homepage
+    	model.addAttribute("title", "Speed-E-Eats");
     	
         return "main";
     }

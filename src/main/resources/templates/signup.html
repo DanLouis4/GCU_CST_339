@@ -7,8 +7,13 @@
 </head>
 <body>
 <section layout:fragment="content" class="container mt-5" style="max-width: 600px;">
+	<video autoplay muted loop id="bg-video">
+	    <source th:src="@{/videos/videoBG.mp4}" type="video/mp4">
+	</video>
+	
+	<div class="container-fluid text-bg-dark rounded bg-opacity-75 p-4">
     <h2 class="text-center mb-4">Sign Up</h2>
-
+	<div class="text-center">
     <form th:action="@{/signup/}" th:object="${userModel}" method="post">
 
         <!-- First Name -->
@@ -29,7 +34,7 @@
         <div class="form-group mb-3">
             <label for="username" class="form-label">Username</label>
             <input type="text" id="username" th:field="*{username}" class="form-control"/>
-            <small class="form-text text-muted">Letters, numbers, and underscores only</small>
+            <small class="form-text text-white">Letters, numbers, and underscores only</small>
             <div class="text-danger" th:errors="*{username}"></div>
         </div>
 
@@ -37,7 +42,7 @@
         <div class="form-group mb-3">
             <label for="email" class="form-label">Email</label>
             <input type="email" id="email" th:field="*{email}" class="form-control"/>
-            <small class="form-text text-muted">Enter a valid email address</small>
+            <small class="form-text text-white">Enter a valid email address</small>
             <div class="text-danger" th:errors="*{email}"></div>
         </div>
 
@@ -45,7 +50,7 @@
         <div class="form-group mb-3">
             <label for="password" class="form-label">Password</label>
             <input type="password" id="password" th:field="*{password}" class="form-control"/>
-            <small class="form-text text-muted">8–32 characters, must include at least one special character</small>
+            <small class="form-text text-white">8–32 characters, must include at least one special character</small>
             <div class="text-danger" th:errors="*{password}"></div>
         </div>
 
@@ -62,9 +67,11 @@
         </div>
 
         <div class="d-grid">
-            <button type="submit" class="btn btn-primary">Register</button>
+            <button type="submit" class="btn bg-white btn-custom text-danger">Register</button>
         </div>
     </form>
+	</div>
+	</div>
 </section>
 </body>
 </html>

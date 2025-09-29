@@ -10,7 +10,7 @@
     <div class="alert alert-success">
         <h3>Sign In Successful!</h3>
         <p th:text="'Welcome back, ' + ${username} + '!'"></p>
-        <p>You are now signed in to BUSINESSNAME Food Delivery Service.</p>
+        <p>You are now signed in to <span th:text="${title}" class="banco"></span> Food Delivery Service.</p>
     </div>
 </section>
 </body>

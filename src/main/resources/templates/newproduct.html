@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${title}">New Product</title>
+</head>
+<body layout:decorate="~{defaultTemplate}">
+    <section layout:fragment="content" class="container mt-5">
+        <h2>Create a New Product</h2>
+
+        <!-- TODO: Complete Thymeleaf form fields -->
+        <form th:action="@{/products/save}" th:object="${productModel}" method="post" class="mt-4">
+
+            <!-- Product Name -->
+            <div class="mb-3">
+                <label for="name" class="form-label">Product Name</label>
+                <input type="text" id="name" th:field="*{name}" class="form-control" placeholder="Enter product name">
+                <div class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+            </div>
+
+            <!-- Description -->
+            <div class="mb-3">
+                <label for="description" class="form-label">Description</label>
+                <textarea id="description" th:field="*{description}" class="form-control" rows="3"
+                          placeholder="Enter product description"></textarea>
+                <div class="text-danger" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></div>
+            </div>
+
+            <!-- Price -->
+            <div class="mb-3">
+                <label for="price" class="form-label">Price ($)</label>
+                <input type="number" id="price" th:field="*{price}" class="form-control" step="0.01"
+                       placeholder="0.00">
+                <div class="text-danger" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></div>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-danger">Save Product</button>
+        </form>
+    </section>
+</body>
+</html>

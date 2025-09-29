@@ -6,25 +6,23 @@
     <title>Main Page</title>
 </head>
 <body>
-    <video autoplay muted loop id="bg-video">
-        <source th:src="@{/videos/videoBG.mp4}" type="video/mp4">
-    </video>
-
     <!-- Override container to full-width -->
-    <section layout:fragment="content" class="p-0 m-0 w-100">
-        <div class="split-container">
-            <div class="left-section">
-                <h1>BUSINESSNAME</h1>
-                <div class="logo-placeholder rounded-circle bg-light text-dark d-flex justify-content-center align-items-center"
-                     style="width:150px; height:150px; margin-top:20px;">
-                    LOGO
-                </div>
-            </div>
-            <div class="right-section">
-                <a th:href="@{/signin/}" class="btn btn-custom">Sign In</a>
-                <a th:href="@{/signup/}" class="btn btn-custom">Sign Up</a>
-            </div>
-        </div>
-    </section>
+	<section layout:fragment="content" class="container-fluid p-0">
+	    <video autoplay muted loop id="bg-video">
+	        <source th:src="@{/videos/videoBG.mp4}" type="video/mp4">
+	    </video>
+	    <div class="row g-0 vh-100">
+	        <!-- Left side -->
+	        <div class="col-12 col-md-6 d-flex flex-column justify-content-center align-items-center bg-dark bg-opacity-50 text-white text-center p-4">
+	            <h1 class="banco display-3" th:text="${title}">Speed-E-Eats</h1>
+	            <img th:src="@{/images/logo.png}" class="img-fluid" style="max-width: 200px;">
+	        </div>
+	        <!-- Right side -->
+	        <div class="col-12 col-md-6 d-flex flex-column justify-content-center align-items-center bg-danger bg-opacity-75 bg-gradient text-center p-4">
+	            <a th:href="@{/signin/}" class="btn bg-white btn-custom w-75 mb-3 text-danger">Sign In</a>
+	            <a th:href="@{/signup/}" class="btn bg-white btn-custom w-75 text-danger">Sign Up</a>
+	        </div>
+	    </div>
+	</section>
 </body>
 </html>

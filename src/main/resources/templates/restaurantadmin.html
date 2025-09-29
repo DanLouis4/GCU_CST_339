@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>Restaurant Admin</title>
+</head>
+<body layout:decorate="~{defaultTemplate}">
+    <section layout:fragment="content" class="container mt-5">
+        <h2>[Restaurant Name] Admin</h2>
+
+        <!-- Success Notifications -->
+        <div th:if="${successMessage}" class="alert alert-success mt-3" role="alert">
+            <span th:text="${successMessage}">Product was added successfully!</span>
+        </div>
+
+        <div th:if="${updateMessage}" class="alert alert-info mt-3" role="alert">
+            <span th:text="${updateMessage}">Product was updated successfully!</span>
+        </div>
+
+        <div th:if="${deleteMessage}" class="alert alert-danger mt-3" role="alert">
+            <span th:text="${deleteMessage}">Product was deleted successfully!</span>
+        </div>
+
+        <!-- Product Table Placeholder -->
+        <table class="table table-striped mt-4">
+            <thead>
+                <tr>
+                    <th>Product Name</th>
+                    <th>Description</th>
+                    <th>Price</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- TODO: Dynamically populate rows from ProductService -->
+                <tr>
+                    <td>Sample Product</td>
+                    <td>Sample description...</td>
+                    <td>$0.00</td>
+                    <td>
+                        <a href="#" class="btn btn-sm btn-warning">Edit</a>
+                        <a href="#" class="btn btn-sm btn-danger">Delete</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Admin Actions -->
+        <div class="mt-4">
+            <a th:href="@{/products/new}" class="btn btn-success me-2">+ Add New Product</a>
+            <a th:href="@{/restaurant/menu}" class="btn btn-outline-primary">View Restaurant Menu</a>
+        </div>
+    </section>
+</body>
+</html>

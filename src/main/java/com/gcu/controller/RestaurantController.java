@@ -14,7 +14,7 @@ public class RestaurantController {
     private ProductServiceInterface productService;
 
     // Admin page for restaurant owners
-    @GetMapping("/restaurant/admin")
+    @GetMapping("/restaurantadmin")
     public String adminPage(Model model) {
         model.addAttribute("restaurantName", "Sample Restaurant");
         model.addAttribute("products", productService.getAllProducts());
@@ -22,7 +22,7 @@ public class RestaurantController {
     }
 
     // Menu page for customers
-    @GetMapping("/restaurant/menu")
+    @GetMapping("/restaurantmenu")
     public String menuPage(Model model) {
         model.addAttribute("restaurantName", "My Restaurant");
         model.addAttribute("products", productService.getAllProducts());

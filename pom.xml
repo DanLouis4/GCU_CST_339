@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.gcu</groupId>
-	<artifactId>CLC-milestone2</artifactId>
+	<artifactId>CLC-milestone3</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>CLC-milestone2</name>
-	<description>CLC Milestone 2</description>
+	<name>CLC-milestone3</name>
+	<description>CLC Milestone 3</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -57,11 +57,10 @@
 		<dependency>
 		    <groupId>nz.net.ultraq.thymeleaf</groupId>
     		<artifactId>thymeleaf-layout-dialect</artifactId>
-    		<version>3.4.0</version>
 		</dependency>
 	</dependencies>
 	<build>
-	<finalName>businessname</finalName>
+	<finalName>speed-e-eats</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

@@ -15,59 +15,39 @@
  * 
  * TODO: Save new users to database once persistence layer is added.
  */
-
 package com.gcu.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.gcu.business.SignUpServiceInterface;
 import com.gcu.model.UserModel;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
-
 @Controller
-@RequestMapping("/signup")
 public class SignUpController {
 
-    // Show the sign-up form
-    @GetMapping("/")
-    public String signUpForm(Model model, HttpServletRequest request) {
-    	
-    	boolean loggedIn = request.getSession().getAttribute("username") != null;
-    	
-    	model.addAttribute("headerTemplate", loggedIn ? "layouts/common-guest" : "layouts/common-user");
-    	model.addAttribute("userModel", new UserModel());
+    @Autowired
+    private SignUpServiceInterface service;
+
+    @GetMapping("/signup")
+    public String displayRegistration(Model model) {
+        model.addAttribute("title", "Registration Form");
+        model.addAttribute("userModel", new UserModel());
         return "signup";
     }
 
-    // Handle form submission
-    @PostMapping("/")
-    public String processSignUp(@Valid UserModel userModel, BindingResult bindingResult, Model model, HttpServletRequest request) {
-
-        // If validation fails, reload the sign-up form with correct navbar
-        if (bindingResult.hasErrors()) {
-            boolean loggedIn = request.getSession().getAttribute("username") != null;
-            model.addAttribute("headerTemplate", loggedIn ? "layouts/common-guest" : "layouts/common-guest");
+    @PostMapping("/doSignUp")
+    public String doRegistration(UserModel model, Model viewModel) {
+        boolean registered = service.register(model);
+        if(registered) {
+            System.out.println("User registered successfully!");
+            return "signupSuccess";
+        } else {
+            viewModel.addAttribute("error", "Registration failed");
             return "signup";
         }
-        
-        // retreats and sets session data
-    	request.getSession().setAttribute("username", userModel.getUsername());
-    	boolean loggedIn = request.getSession().getAttribute("username") == null;
-    	
-    	// sets the proper navBar
-    	model.addAttribute("headerTemplate", loggedIn ? "layouts/common-guest" : "layouts/common-user");    	
-    	model.addAttribute("username", userModel.getUsername());
-        
-        // TODO: Save user to the database in a later milestone
-
-        // Add user info to show on the success page
-        model.addAttribute("userModel", userModel);
-        return "signupSuccess";
     }
 }

@@ -13,60 +13,38 @@
  * 
  * TODO: Replace hardcoded check with DB-driven authentication in future.
  */
-
 package com.gcu.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.gcu.business.SignInServiceInterface;
 import com.gcu.model.SignInModel;
-import jakarta.validation.Valid;
-import jakarta.servlet.http.HttpServletRequest;
-
 
 @Controller
-@RequestMapping("/signin")
 public class SignInController {
-    
-    // Show sign-in form
-    @GetMapping("/")
-    public String signInForm(Model model, HttpServletRequest request) {
-    	
-    	boolean loggedIn = request.getSession().getAttribute("username") != null;
-    	
-    	model.addAttribute("headerTemplate", loggedIn ? "layouts/common-guest" : "layouts/common-user");    	
-        model.addAttribute("signInModel", new SignInModel());
+
+    @Autowired
+    private SignInServiceInterface service;
+
+    @GetMapping("/signin")
+    public String displayLogin(Model model) {
+        model.addAttribute("title", "Login Form");
+        model.addAttribute("signinModel", new SignInModel());
         return "signin";
     }
 
-    // Handle form submission
-    @PostMapping("/")
-    public String processSignIn(
-            @Valid SignInModel signInModel, BindingResult bindingResult, Model model, HttpServletRequest request) {
-
-    	if (bindingResult.hasErrors()) {
-    	    model.addAttribute("loginError", "Please correct the errors below and try again.");
-    	    return "signin";
-    	}
-
-        // Temporary hard-coded validation (replace with DB later)
-        if ("testuser".equals(signInModel.getUsername()) && "Password123!".equals(signInModel.getPassword())) {
-        	
-        	// retrieves and set session data        
-        	request.getSession().setAttribute("username", signInModel.getUsername());
-        	boolean loggedIn = request.getSession().getAttribute("username") != null;
-        	
-        	// selects the proper navBar
-        	model.addAttribute("headerTemplate", loggedIn ? "layouts/common-user" : "layouts/common-guest");    	
-        	model.addAttribute("username", signInModel.getUsername());
-            model.addAttribute("title", "Speed-E-Eats");
+    @PostMapping("/doSignIn")
+    public String doLogin(SignInModel model, Model viewModel) {
+        boolean authenticated = service.authenticate(model.getUsername(), model.getPassword());
+        if(authenticated) {
+            System.out.println("User authenticated successfully!");
             return "signinSuccess";
         } else {
-            model.addAttribute("loginError", "Invalid username or password.");
+            viewModel.addAttribute("error", "Invalid credentials");
             return "signin";
         }
     }

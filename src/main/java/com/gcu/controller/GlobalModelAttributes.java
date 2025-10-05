@@ -1,0 +1,35 @@
+/**
+ * GlobalModelAttributes
+ * -----------------------------------------
+ * Injects common model attributes into all controllers.
+ * Ensures that the logged-in user's name is available
+ * across all views that use the common-user layout.
+ */
+
+package com.gcu.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ModelAttribute;
+
+import com.gcu.business.UserProfileServiceInterface;
+
+
+@ControllerAdvice // Allows global configuration and behavior to be applied across all controllers in the application
+public class GlobalModelAttributes {
+
+    @Autowired
+    private UserProfileServiceInterface profileService;
+
+    /**
+     * Adds the username to the model for all templates.
+     * If no user is logged in, this remains null.
+     */
+    @ModelAttribute("username")
+    public String addUsernameToModel() {
+        if (profileService.isUserLoggedIn()) {
+            return profileService.getCurrentUsername();
+        }
+        return null;
+    }
+}

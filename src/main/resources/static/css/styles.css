@@ -10,6 +10,15 @@
          url('../fonts/Banco.ttf') format('truetype');
 }
 /* ================================
+   Webkits
+   ================================ */
+
+/* Hide scrollbar while keeping scroll functionality */
+::-webkit-scrollbar {
+    display: none;
+}
+
+/* ================================
    Helpers and testers
    ================================ */
 .test-layout{
@@ -24,7 +33,10 @@ html, body {
     margin: 0;
     display: flex;
     flex-direction: column;
+	-ms-overflow-style: none;  /* IE/Edge */
+	scrollbar-width: none;     /* Firefox */
 }
+
 
 main {
     flex: 1; /* Pushes footer down when content is short */
@@ -123,6 +135,16 @@ main {
 	font-weight: bold;
 	font-family: 'Banco', sans-serif
 }
+
+.link-red {
+    color: inherit;
+    text-decoration: none;
+}
+
+.link-red:hover {
+    color: red;
+}
+
 
 /* ================================
    Footer

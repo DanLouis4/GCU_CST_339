@@ -2,7 +2,7 @@
  * MainController
  * ----------------------------
  * Handles the root ("/") request.
- * Displays the landing page (main.html) with BUSINESSNAME, logo, 
+ * Displays the landing page (main.html) with Speed-E-Eats and its logo, 
  * and Sign In / Sign Up buttons.
  * 
  * No business logic yet — primarily for showing the homepage.
@@ -22,11 +22,9 @@ import jakarta.servlet.http.HttpServletRequest;
 public class MainController {
 
     @GetMapping("/")
-    public String mainPage(Model model, HttpServletRequest request) {
-    	
-    	boolean loggedIn = request.getSession().getAttribute("username") != null;
-    	
-    	model.addAttribute("headerTemplate", loggedIn ? "layouts/common-guest" : "layouts/common-user");    	
+    public String mainPage(Model model) {
+    		
+    	model.addAttribute("headerTemplate", "layouts/common-guest");    	
     	model.addAttribute("title", "Speed-E-Eats");
     	
         return "main";

@@ -12,7 +12,7 @@
 <body>
 	
 	  <!-- Conditional selects the correct header based on whether the session is set -->
-	  <div th:replace="${headerTemplate} :: header"></div>
+	  <div th:replace="${headerTemplate} ?: 'layouts/common-guest' :: header"></div>
 
     <!-- Page content goes here -->
     <main>

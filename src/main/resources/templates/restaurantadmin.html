@@ -32,12 +32,11 @@
                     <th>Actions</th>
                 </tr>
             </thead>
-            <tbody>
-                <!-- TODO: Dynamically populate rows from ProductService -->
-                <tr>
-                    <td>Sample Product</td>
-                    <td>Sample description...</td>
-                    <td>$0.00</td>
+			<tbody>
+				<tr th:each="product : ${products}">
+			    	<td th:text="${product.name}">Sample Product</td>
+			    	<td th:text="${product.description}">Sample description...</td>
+			    	<td>$<span th:text="${product.price}">0.00</span></td>
                     <td>
                         <a href="#" class="btn btn-sm btn-warning">Edit</a>
                         <a href="#" class="btn btn-sm btn-danger">Delete</a>
@@ -48,7 +47,7 @@
 
         <!-- Admin Actions -->
         <div class="mt-4">
-            <a th:href="@{/productnew}" class="btn btn-success me-2">+ Add New Product</a>
+            <a th:href="@{/new}" class="btn btn-success me-2">+ Add New Product</a>
             <a th:href="@{/restaurantmenu}" class="btn btn-outline-primary">View Restaurant Menu</a>
         </div>
     </section>

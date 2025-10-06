@@ -38,7 +38,7 @@ public class ProductController {
         }
 
         productService.createProduct(product);
-        return "redirect:/products?success=true";
+        return "redirect:/restaurantadmin?success=true";
     }
 
     // Show all products

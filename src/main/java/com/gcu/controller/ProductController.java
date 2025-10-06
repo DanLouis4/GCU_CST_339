@@ -38,7 +38,8 @@ public class ProductController {
         }
 
         productService.createProduct(product);
-        return "redirect:/restaurantadmin?success=true";
+        model.addAttribute("headerTemplate", "layouts/common-user");
+        return "redirect:/restaurantadmin?successMessage=true";
     }
 
     // Show all products

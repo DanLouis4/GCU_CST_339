@@ -45,7 +45,7 @@ public class SignUpController {
     @GetMapping("/signup")
     public String displayRegistration(Model model) {
         model.addAttribute("title", "Register Account");
-        model.addAttribute("signUpModel", new UserModel());
+        model.addAttribute("userModel", new UserModel());
         model.addAttribute("headerTemplate", "layouts/common-guest");
         return "signup";
     }
@@ -63,7 +63,7 @@ public class SignUpController {
      */
     @PostMapping("/signup")
     public String processRegistration(
-            @Valid @ModelAttribute UserModel signUpModel,
+            @Valid @ModelAttribute UserModel userModel,
             BindingResult bindingResult,
             Model model) {
 
@@ -74,7 +74,7 @@ public class SignUpController {
         }
 
         // Attempt registration through service layer
-        boolean registered = service.register(signUpModel);
+        boolean registered = service.register(userModel);
 
         // On success, load the user profile and set user layout
         if (registered) {

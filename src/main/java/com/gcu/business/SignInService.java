@@ -31,7 +31,7 @@ public class SignInService implements SignInServiceInterface {
     @Override
     public boolean authenticate(String username, String password) {
         // Hardcoded test credentials
-        if ("testuser".equals(username) && "Password123!".equals(password)) {
+        if ("testuser".equals(username) && "Pass12345!".equals(password)) {
             userSession.setUsername(username); // Store username in session.
             return true;
         }

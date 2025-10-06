@@ -20,6 +20,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.gcu.business.SignInServiceInterface;
 import com.gcu.model.UserModel;
@@ -41,7 +42,7 @@ public class SignInController {
     @GetMapping("/signin")
     public String displaySignIn(Model model) {
         model.addAttribute("title", "Sign In");
-        model.addAttribute("signInModel", new UserModel());
+        model.addAttribute("userModel", new UserModel());
         model.addAttribute("headerTemplate", "layouts/common-guest");
         return "signin";
     }
@@ -58,19 +59,21 @@ public class SignInController {
      */
     @PostMapping("/signin")
     public String processSignIn(
-            @Valid @ModelAttribute UserModel signInModel,
+            @ModelAttribute UserModel userModel,
             BindingResult bindingResult,
             Model model) {
 
         // If validation fails, return to sign-in page.
         if (bindingResult.hasErrors()) {
             model.addAttribute("headerTemplate", "layouts/common-guest");
+            System.out.println("Issue with binding...");
+            model.addAttribute("loginError", "Invalid username or password.");
             return "signin";
         }
 
         // Delegate authentication to service layer.
         boolean authenticated = service.authenticate(
-                signInModel.getUsername(), signInModel.getPassword());
+                userModel.getUsername(), userModel.getPassword());
 
         // If successful, redirect to the user profile.
         if (authenticated) {

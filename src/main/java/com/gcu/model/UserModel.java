@@ -1,3 +1,14 @@
+/**
+ * UserModel
+ * ----------------------------------------
+ * Serves as the unified data model for both
+ * user registration (Sign Up) and authentication (Sign In).
+ *
+ * Fields map directly to the "Users" table in the ER diagram.
+ * This class uses Jakarta Validation for form input verification
+ * and will later integrate with the database layer for persistence.
+ */
+
 package com.gcu.model;
 
 import jakarta.validation.constraints.Email;
@@ -6,7 +17,11 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 public class UserModel {
+    
+	/** Primary key for each user record (auto-generated in DB). */
+    private Long id;
 
+    /** User's first name (required during registration). */
     @NotNull(message = "First name is required")
     private String firstName;
 
@@ -26,12 +41,16 @@ public class UserModel {
     @Pattern(regexp = ".*[!@#$%^&*(),.?\":{}|<>].*", 
              message = "Password must contain at least one special character")
     private String password;
-
+    
+    
     @NotNull(message = "Role is required")
-    private String role; // CUSTOMER, DRIVER, RESTAURANT
+    private String role; // CUSTOMER or OWNER
 
+    
+    /** Default constructor required by Spring MVC and frameworks. */
     public UserModel() {}
 
+    /** Full constructor used during sign-up or testing. */
     public UserModel(String firstName, String lastName, String username, String email, String password, String role) {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -42,6 +61,10 @@ public class UserModel {
     }
 
     // Getters and setters
+
+	public Long getId() { return id; }
+	public void setId(Long id) {this.id = id; }
+	
     public String getFirstName() { return firstName; }
     public void setFirstName(String firstName) { this.firstName = firstName; }
 

@@ -7,7 +7,7 @@ public class ProductController {
 
     // TODO: Inject ProductServiceInterface with @Autowired
 
-    // TODO: Add GET mapping for /products/new to show newproduct.html
+    // TODO: Add GET mapping for /productsnew to show productnew.html
 
-    // TODO: Add POST mapping for /products/save to handle form submission
+    // TODO: Add POST mapping for /productssave to handle form submission
 }

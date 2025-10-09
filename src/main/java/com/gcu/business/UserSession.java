@@ -1,55 +1,147 @@
-/**
- * UserSession
- * -----------------------------------------
- * Maintains the currently authenticated user's session data.
- * This class is managed by Spring with a @SessionScope annotation,
- * ensuring that a unique instance exists for each browser session.
- * 
- * Responsibilities:
- * - Store the username of the logged-in user.
- * - Track login state for the active session.
- * - Clear session data on logout or session expiration.
- */
-
 package com.gcu.business;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.SessionScope;
 
+/**
+ * UserSession
+ * ----------------------------
+ * Maintains the active user's session data across requests.
+ * This version includes a tokenized password representation
+ * for display purposes only (never the real password).
+ */
+
 @Component
 @SessionScope
-public class UserSession {
-
-    // Tracks the currently logged-in user's username.
+public class UserSession
+{
+    // ----------------------------
+    // Fields
+    // ----------------------------
     private String username;
+    private String firstName;
+    private String lastName;
+    private String email;
+    private String role;
+
+    // Tokenized password representation (never the raw password)
+    private String passwordToken = "********************";
+
+    // ----------------------------
+    // Getters and Setters
+    // ----------------------------
 
     /**
-     * Returns the username of the currently authenticated user.
+     * Gets the username of the current user.
+     * @return username
      */
     public String getUsername() {
         return username;
     }
 
     /**
-     * Sets the username for the current session user.
-     * @param username The authenticated user's username.
+     * Sets the username of the current user.
+     * @param username the username to set
      */
     public void setUsername(String username) {
         this.username = username;
     }
 
     /**
-     * Checks if a user is currently logged in for this session.
-     * @return true if a username is stored; otherwise false.
+     * Gets the first name of the current user.
+     * @return first name
      */
-    public boolean isLoggedIn() {
-        return username != null;
+    public String getFirstName() {
+        return firstName;
     }
 
     /**
-     * Clears session data, effectively logging the user out.
+     * Sets the first name of the current user.
+     * @param firstName the first name to set
+     */
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    /**
+     * Gets the last name of the current user.
+     * @return last name
+     */
+    public String getLastName() {
+        return lastName;
+    }
+
+    /**
+     * Sets the last name of the current user.
+     * @param lastName the last name to set
+     */
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    /**
+     * Gets the email of the current user.
+     * @return email
+     */
+    public String getEmail() {
+        return email;
+    }
+
+    /**
+     * Sets the email of the current user.
+     * @param email the email to set
+     */
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    
+    /**
+     * Gets the masked (tokenized) password value.
+     * This is not the user's real password.
+     * @return password token (e.g., "********************")
+     */
+    public String getPasswordToken() {
+        return passwordToken;
+    }
+    
+    /**
+     * Sets the password token (for display only).
+     * Typically called after user registration or login.
+     * @param token masked token (default: "********************")
+     */
+    public void setPasswordToken(String token) {
+        this.passwordToken = token;
+    }
+
+    /**
+     * Gets the role of the current user.
+     * @return role (e.g., "CUSTOMER" or "RESTAURANT")
+     */
+    public String getRole() {
+        return role;
+    }
+
+    /**
+     * Sets the role of the current user.
+     * @param role the role to set
+     */
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    // ----------------------------
+    // Utility Methods
+    // ----------------------------
+
+    /**
+     * Clears all session data. Called when user logs out or session ends.
      */
     public void clear() {
         this.username = null;
+        this.firstName = null;
+        this.lastName = null;
+        this.email = null;
+        this.role = null;
+        this.passwordToken = "********************";
     }
 }

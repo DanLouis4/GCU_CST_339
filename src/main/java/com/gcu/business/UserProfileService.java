@@ -30,11 +30,12 @@ public class UserProfileService implements UserProfileServiceInterface {
     }
 
     /**
-     * Determines if a user is logged in by checking the session.
+     * Checks if a user is logged in based on whether session data exists.
+     * @return true if session username exists, false otherwise
      */
     @Override
     public boolean isUserLoggedIn() {
-        return userSession.isLoggedIn();
+        return userSession.getUsername() != null;
     }
 
     /**

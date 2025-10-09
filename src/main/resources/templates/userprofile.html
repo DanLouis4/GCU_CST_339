@@ -3,17 +3,73 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/defaultTemplate}">
 <head>
-    <title>Speed-E-Eats!</title>
+    <title>User Profile</title>
 </head>
 <body>
-<section layout:fragment="content" class="container mt-5 text-center">
-        <h2>User Profile</h2>
-        <p>Welcome, <span th:text="${username}">Sample User</span></p>
+<section layout:fragment="content" class="container mt-5 mb-5">
 
-        <!-- Links for Restaurant role -->
-        <div class="mt-4">
-            <a th:href="@{/restaurantadmin}" href="restaurantadmin.html" class="btn btn-primary me-2">Manage My Restaurant</a>
+    <!-- Page Title -->
+    <h2 class="text-center fw-bold mb-5">User Profile</h2>
+
+    <!-- Profile Card -->
+    <div class="card mx-auto shadow-sm border-0" style="max-width: 400px; border-radius: 15px;">
+        <div class="card-body text-center">
+
+            <!-- USERNAME -->
+            <div class="mb-4">
+                <label class="form-label text-uppercase fw-semibold small text-muted">User Name</label>
+                <div class="border rounded py-2 bg-light">
+                    <span class="fw-bold text-primary" th:text="${username}">username</span>
+                </div>
+                <button class="btn btn-link btn-sm text-decoration-none mt-1 text-secondary">Edit</button>
+            </div>
+
+            <!-- NAME -->
+            <div class="mb-4">
+                <label class="form-label text-uppercase fw-semibold small text-muted">Name</label>
+                <div class="border rounded py-2 bg-light">
+                    <span th:text="${firstName} + ' ' + ${lastName}">First Last</span>
+                </div>
+                <button class="btn btn-link btn-sm text-decoration-none mt-1 text-secondary">Edit</button>
+            </div>
+
+            <!-- EMAIL -->
+            <div class="mb-4">
+                <label class="form-label text-uppercase fw-semibold small text-muted">Email</label>
+                <div class="border rounded py-2 bg-light">
+                    <span th:text="${email}">email@example.com</span>
+                </div>
+                <button class="btn btn-link btn-sm text-decoration-none mt-1 text-secondary">Edit</button>
+            </div>
+
+            <!-- PASSWORD -->
+            <div class="mb-4">
+                <label class="form-label text-uppercase fw-semibold small text-muted">Password</label>
+                <div class="border rounded py-2 bg-light">
+                    <span>********************</span>
+                </div>
+                <button class="btn btn-link btn-sm text-decoration-none mt-1 text-secondary">Edit</button>
+            </div>
+
+            <!-- MANAGE RESTAURANT (visible for RESTAURANT role only) -->
+            <div class="mt-4" th:if="${role == 'RESTAURANT'}">
+                <a th:href="@{/restaurantadmin}" class="btn btn-primary w-100 fw-semibold mb-2">
+                    Manage My Restaurant
+                </a>
+            </div>
+
+            <!-- SIGN OUT -->
+            <div class="mt-2">
+                <form th:action="@{/signout}" method="post">
+                    <button type="submit" class="btn btn-danger w-100 fw-semibold">
+                        Sign Out
+                    </button>
+                </form>
+            </div>
+
         </div>
-    </section>
+    </div>
+
+</section>
 </body>
 </html>

@@ -67,6 +67,11 @@
 		    <groupId>nz.net.ultraq.thymeleaf</groupId>
     		<artifactId>thymeleaf-layout-dialect</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>com.gcu</groupId>
+			<artifactId>topic4-3</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 	<build>
 	<finalName>speed-e-eats</finalName>

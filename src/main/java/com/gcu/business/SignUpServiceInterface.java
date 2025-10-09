@@ -7,10 +7,6 @@
  * - Accept new user registration data from the controller.
  * - Validate and process registration requests.
  * - Return a boolean result to indicate success or failure.
- * 
- * Note:
- * In Milestone 3, persistence is simulated. The database
- * layer will be added in Milestone 4.
  */
 
 package com.gcu.business;

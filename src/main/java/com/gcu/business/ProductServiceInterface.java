@@ -8,7 +8,7 @@ public interface ProductServiceInterface {
 
     //Defines createProduct(ProductModel product)
 
-        void createProduct(ProductModel product);
+        boolean createProduct(ProductModel product);
 
         List<ProductModel> getAllProducts();
     

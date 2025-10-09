@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.gcu.business.SignUpServiceInterface;
+import com.gcu.business.UserSession;
 import com.gcu.model.UserModel;
 
 import jakarta.validation.Valid;
@@ -35,6 +36,9 @@ public class SignUpController {
     @Autowired
     private SignUpServiceInterface service;
 
+    @Autowired
+    private UserSession userSession; 
+    
     /**
      * GET request handler for the registration page.
      * Initializes a blank SignUpModel for form binding.
@@ -62,7 +66,7 @@ public class SignUpController {
      * @return Redirects to /userprofile on success or redisplays form on failure.
      */
     @PostMapping("/signup")
-    public String processRegistration(
+    public String processSignUp(
             @Valid @ModelAttribute UserModel userModel,
             BindingResult bindingResult,
             Model model) {
@@ -79,6 +83,15 @@ public class SignUpController {
         // On success, load the user profile and set user layout
         if (registered) {
             model.addAttribute("headerTemplate", "layouts/common-user");
+            userSession.setUsername(userModel.getUsername());
+            userSession.setFirstName(userModel.getFirstName());
+            userSession.setLastName(userModel.getLastName());
+            userSession.setEmail(userModel.getEmail());
+            userSession.setRole(userModel.getRole());
+
+            // Set a display-only password token (not the real password)
+            userSession.setPasswordToken("********************");
+            
             return "redirect:/userprofile";
         }
 

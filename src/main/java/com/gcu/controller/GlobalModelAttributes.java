@@ -13,23 +13,26 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import com.gcu.business.UserProfileServiceInterface;
+import com.gcu.business.UserSession;
 
 
 @ControllerAdvice // Allows global configuration and behavior to be applied across all controllers in the application
 public class GlobalModelAttributes {
 
-    @Autowired
-    private UserProfileServiceInterface profileService;
+	@Autowired
+	private UserSession userSession;
 
     /**
-     * Adds the username to the model for all templates.
+     * Adds the username and role to the model for all templates.
      * If no user is logged in, this remains null.
      */
     @ModelAttribute("username")
-    public String addUsernameToModel() {
-        if (profileService.isUserLoggedIn()) {
-            return profileService.getCurrentUsername();
-        }
-        return null;
+    public String username() {
+    	return userSession.getUsername();
+    }
+    
+    @ModelAttribute("role")
+    public String role() {
+    	return userSession.getRole();
     }
 }

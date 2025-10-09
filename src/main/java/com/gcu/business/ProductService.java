@@ -1,36 +1,60 @@
 package com.gcu.business;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.gcu.business.ProductServiceInterface;
+import com.gcu.dao.repository.ProductRepository;
 import com.gcu.model.ProductModel;
 
+/**
+ * ProductService
+ * ----------------------------
+ * Implements ProductServiceInterface to provide business logic
+ * for managing products.
+ * 
+ * Responsibilities:
+ * - Retrieves and creates products using ProductRepository.
+ * - Acts as an intermediary between controllers and the data access layer.
+ */
+
 @Service
-public class ProductService implements ProductServiceInterface {
+public class ProductService implements ProductServiceInterface
+{
+    // ----------------------------
+    // Variables
+    // ----------------------------
+    @Autowired
+    private ProductRepository productRepository;
+    
+    
 
-    // Maintains in-memory list of products (until Database is used)
+    // ----------------------------
+    // Methods
+    // ----------------------------
 
-    private List<ProductModel> products = new ArrayList<>();
-    private long nextId = 1;
-
-    // Implements createProduct(ProductModel product)
-
+    /**
+     * Retrieves all products from the database.
+     * 
+     * @return List of ProductModel objects.
+     */
     @Override
-    public void createProduct(ProductModel product) 
+    public List<ProductModel> getAllProducts()
     {
-        
-        if (product.getId() == null) {
-            product.setId(nextId++);
-        }
-        products.add(product);
+        return productRepository.findAll();
     }
 
-    // Implements getAllProducts()
-
+    /**
+     * Creates a new product record.
+     * 
+     * @param product The product model containing the new product details.
+     * @return true if the product was successfully created; false otherwise.
+     */
     @Override
-    public List<ProductModel> getAllProducts() {
-        return new ArrayList<>(products); 
+    public boolean createProduct(ProductModel product)
+    {
+        return productRepository.create(product);
     }
 }

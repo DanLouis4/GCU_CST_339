@@ -7,7 +7,7 @@
 </head>
 <body>
     <section layout:fragment="content" class="container mt-5">
-        <h2>[Restaurant Name] Admin</h2>
+		<h2 th:text="${restaurantName + ' Admin'}">[Restaurant Name] Admin</h2>
 
         <!-- Success Notifications -->
         <div th:if="${successMessage}" class="alert alert-success mt-3" role="alert">

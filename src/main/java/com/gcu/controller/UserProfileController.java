@@ -17,10 +17,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+
 import com.gcu.business.UserProfileServiceInterface;
+import com.gcu.business.UserSession;
 
 @Controller
 public class UserProfileController {
+
+	@Autowired
+	private UserSession userSession;
 
     @Autowired
     private UserProfileServiceInterface profileService;
@@ -31,12 +36,11 @@ public class UserProfileController {
      */
     @GetMapping("/userprofile")
     public String displayUserProfile(Model model) {
-        if (!profileService.isUserLoggedIn()) {
-            return "redirect:/signin";
-        }
-
+        model.addAttribute("username", userSession.getUsername());
+        model.addAttribute("firstName", userSession.getFirstName());
+        model.addAttribute("lastName", userSession.getLastName());
+        model.addAttribute("email", userSession.getEmail());
         model.addAttribute("title", "User Profile");
-        model.addAttribute("username", profileService.getCurrentUsername());
         model.addAttribute("headerTemplate", "layouts/common-user");
         return "userprofile";
     }

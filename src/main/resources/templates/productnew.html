@@ -34,6 +34,9 @@
                        placeholder="0.00">
                 <div class="text-danger" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></div>
             </div>
+			
+			<!-- Hidden Restaurant ID -->
+			<input type="hidden" name="restaurantId" th:value="1" />
 
             <!-- Submit Button -->
             <button type="submit" class="btn btn-danger">Save Product</button>

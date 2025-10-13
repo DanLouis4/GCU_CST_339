@@ -47,6 +47,34 @@ public class ProductService implements ProductServiceInterface
     }
 
     /**
+     * Retrieves the restaurant ID associated with the logged-in user.
+     * 
+     * @param username The username of the restaurant owner.
+     * @return The restaurant ID if found; 0 otherwise.
+     */
+    public int getRestaurantIdByUsername(String username)
+    {
+        try
+        {
+            String sql = """
+                SELECT r.id
+                FROM restaurants r
+                JOIN users u ON r.owner_id = u.id
+                WHERE u.username = ?
+            """;
+
+            // Use ProductRepository's JdbcTemplate to run this query
+            return productRepository.getJdbcTemplate().queryForObject(sql, Integer.class, username);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+    
+    
+    /**
      * Creates a new product record.
      * 
      * @param product The product model containing the new product details.

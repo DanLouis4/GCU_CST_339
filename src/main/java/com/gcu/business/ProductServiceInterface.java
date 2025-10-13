@@ -11,6 +11,8 @@ public interface ProductServiceInterface {
         boolean createProduct(ProductModel product);
 
         List<ProductModel> getAllProducts();
+
+		int getRestaurantIdByUsername(String username);
     
     // Defines getAllProducts() returning List<ProductModel>
 }

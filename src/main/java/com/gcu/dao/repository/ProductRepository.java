@@ -170,4 +170,9 @@ public class ProductRepository implements DataAccessInterface<ProductModel>
 		// TODO Auto-generated method stub
 		return false;
 	}
+	
+	public JdbcTemplate getJdbcTemplate()
+	{
+	    return jdbcTemplate;
+	}
 }

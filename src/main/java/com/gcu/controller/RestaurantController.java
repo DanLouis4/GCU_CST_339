@@ -44,7 +44,7 @@ public class RestaurantController {
     public String adminPage(Model model) {
     	model.addAttribute("restaurantName", "Speed-E-Eats Deli");;
         model.addAttribute("headerTemplate", "layouts/common-user");
-        model.addAttribute("products", productService.getAllProducts());
+        model.addAttribute("products", productService.getAllProducts(userSession.getUsername()));
         
         // 🔹 Touch session bean so GlobalModelAttributes picks it up
         System.out.println("Restaurant Admin accessed by: " + userSession.getUsername());
@@ -57,7 +57,7 @@ public class RestaurantController {
     public String menuPage(Model model) {
         model.addAttribute("restaurantName", "Speed-E-Eats");
         model.addAttribute("headerTemplate", "layouts/common-user");
-        model.addAttribute("products", productService.getAllProducts());
+        model.addAttribute("products", productService.getAllProducts(userSession.getUsername()));
         
         System.out.println("Restaurant Menu accessed by: " + userSession.getUsername());
         

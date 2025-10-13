@@ -187,7 +187,7 @@ public class ProductController {
 
     @GetMapping("/productnew")
     public String showProducts(@RequestParam(value = "success", required = false) String success, Model model) {
-        List<ProductModel> productList = productService.getAllProducts();
+        List<ProductModel> productList = productService.getAllProducts(userSession.getUsername());
         model.addAttribute("productList", productList);
         
         
@@ -200,7 +200,7 @@ public class ProductController {
 
     @GetMapping("/products/menu")
     public String viewRestaurantMenu(Model model) {
-        List<ProductModel> products = productService.getAllProducts();
+        List<ProductModel> products = productService.getAllProducts(userSession.getUsername());
         model.addAttribute("products", products);
         model.addAttribute("restaurantName", "Speed-E-Eats");
         model.addAttribute("headerTemplate", "layouts/common-user");

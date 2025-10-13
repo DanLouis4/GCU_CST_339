@@ -41,9 +41,9 @@ public class ProductService implements ProductServiceInterface
      * @return List of ProductModel objects.
      */
     @Override
-    public List<ProductModel> getAllProducts()
+    public List<ProductModel> getAllProducts(String username)
     {
-        return productRepository.findAll();
+        return productRepository.findByOwner(username);
     }
 
     /**
@@ -85,4 +85,5 @@ public class ProductService implements ProductServiceInterface
     {
         return productRepository.create(product);
     }
+
 }

@@ -31,7 +31,9 @@ public class UserRepository implements DataAccessInterface<UserModel> {
 	@Override
 	public List<UserModel> findAll() {
         List<UserModel> users = new ArrayList<>();
-        try {
+        
+        try
+        {
             String sql = "SELECT * FROM users";
             SqlRowSet srs = jdbcTemplate.queryForRowSet(sql);
             while (srs.next()) {
@@ -47,6 +49,7 @@ public class UserRepository implements DataAccessInterface<UserModel> {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        
         return users;
 	}
 
@@ -57,21 +60,28 @@ public class UserRepository implements DataAccessInterface<UserModel> {
 	}
 
 	public UserModel findByUsername(String username) {
-        String sql = "SELECT * FROM USERS WHERE USERNAME = ?";
-        try {
-            SqlRowSet srs = jdbcTemplate.queryForRowSet(sql, username);
+	    try
+	    {
+	        String sql = """
+	            SELECT id, first_name, last_name, username, email, password, role
+	            FROM users
+	            WHERE username = ?
+	        """;
 
-            if (srs.next()) {
-                UserModel user = new UserModel();
-                user.setId(srs.getLong("ID"));
-                user.setUsername(srs.getString("USERNAME"));
-                user.setPassword(srs.getString("PASSWORD"));
-                return user;
-            }
-        } catch (Exception e) {
-            System.out.println("Error finding user by username: " + e.getMessage());
-        }
-        return null;
+	        return jdbcTemplate.queryForObject(sql, (rs, rowNum) ->
+	            new UserModel(rs.getString("first_name"),
+	            			  rs.getString("last_name"),
+	            			  rs.getString("username"),
+	            			  rs.getString("email"),
+	            			  rs.getString("password"),
+	            			  rs.getString("role")),
+	            username);
+	    }
+	    catch (Exception e)
+	    {
+	        e.printStackTrace();
+	        return null;
+	    }
     }
 
 

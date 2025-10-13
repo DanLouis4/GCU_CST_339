@@ -15,11 +15,17 @@ package com.gcu.business;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.gcu.dao.repository.UserRepository;
+import com.gcu.model.UserModel;
+
 @Service
 public class SignInService implements SignInServiceInterface {
 
     @Autowired
     private UserSession userSession; // Session Bean managed by Spring.
+    
+    @Autowired
+    private UserRepository userRepository;
 
     /**
      * Authenticates a user's credentials.
@@ -30,11 +36,30 @@ public class SignInService implements SignInServiceInterface {
      */
     @Override
     public boolean authenticate(String username, String password) {
-        // Hardcoded test credentials
-        if ("testuser".equals(username) && "Pass12345!".equals(password)) {
-            userSession.setUsername(username); // Store username in session.
-            return true;
+        try
+        {
+            // Fetch user record from the database
+            UserModel user = userRepository.findByUsername(username);
+
+            // Check for valid credentials (plain-text for now, no BCrypt)
+            if (user != null && password.equals(user.getPassword()))
+            {
+                // Populate session with user info
+                userSession.setUsername(user.getUsername());
+                userSession.setFirstName(user.getFirstName());
+                userSession.setLastName(user.getLastName());
+                userSession.setEmail(user.getEmail());
+                userSession.setRole(user.getRole());
+                userSession.setPasswordToken("********************");
+
+                return true;
+            }
         }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
         return false;
     }
 }

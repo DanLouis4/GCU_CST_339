@@ -9,10 +9,13 @@ public interface ProductServiceInterface {
     //Defines createProduct(ProductModel product)
 
         boolean createProduct(ProductModel product);
-
-        List<ProductModel> getAllProducts();
-
+                
 		int getRestaurantIdByUsername(String username);
-    
-    // Defines getAllProducts() returning List<ProductModel>
-}
+
+		/**
+		 * Retrieves all products from the database.
+		 * 
+		 * @return List of ProductModel objects based on user.
+		 */
+		List<ProductModel> getAllProducts(String username);
+    }

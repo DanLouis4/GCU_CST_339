@@ -19,18 +19,16 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.gcu.dao.repository.UserRepository;
 import com.gcu.business.SignInServiceInterface;
 import com.gcu.model.UserModel;
-import jakarta.validation.Valid;
 
 @Controller
 public class SignInController {
 
     @Autowired
     private SignInServiceInterface service; // Business layer (IoC)
-
+    
     @Autowired
     private UserRepository userRepository;
 
@@ -75,9 +73,19 @@ public class SignInController {
         // Delegate authentication to service layer.
         UserModel user = userRepository.findByUsername(userModel.getUsername());
 
-        // login success
+        // Delegate authentication to service layer
+        boolean isAuthenticated = service.authenticate(
+                userModel.getUsername(),
+                userModel.getPassword());
 
-
+        // Login success
+        if (isAuthenticated)
+        {        	
+            model.addAttribute("headerTemplate", "layouts/common-user");
+            model.addAttribute("loginSuccess", "Welcome back, " + userModel.getUsername() + "!");
+            return "redirect:/userprofile";
+        }
+        
         // If successful, redirect to the user profile.
             if (user != null && userModel.getPassword().equals(user.getPassword())) 
         {

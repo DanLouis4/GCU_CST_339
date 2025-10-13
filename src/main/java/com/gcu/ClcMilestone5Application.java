@@ -6,10 +6,10 @@ import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @ComponentScan({ "com.gcu" })
-public class ClcMilestone4Application {
+public class ClcMilestone5Application {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ClcMilestone4Application.class, args);
+		SpringApplication.run(ClcMilestone5Application.class, args);
 	}
 
 }

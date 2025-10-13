@@ -14,6 +14,8 @@ package com.gcu.business;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.gcu.model.UserModel;
+import com.gcu.dao.repository.UserRepository;
 
 import com.gcu.dao.repository.UserRepository;
 import com.gcu.model.UserModel;
@@ -24,9 +26,9 @@ public class SignInService implements SignInServiceInterface {
     @Autowired
     private UserSession userSession; // Session Bean managed by Spring.
     
+
     @Autowired
     private UserRepository userRepository;
-
     /**
      * Authenticates a user's credentials.
      * 
@@ -53,13 +55,12 @@ public class SignInService implements SignInServiceInterface {
                 userSession.setPasswordToken("********************");
 
                 return true;
-            }
+                }
         }
         catch (Exception e)
         {
             e.printStackTrace();
         }
-
         return false;
-    }
+        }
 }

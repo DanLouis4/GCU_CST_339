@@ -14,6 +14,8 @@ package com.gcu.business;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.gcu.model.UserModel;
+import com.gcu.dao.repository.UserRepository;
 
 @Service
 public class SignInService implements SignInServiceInterface {
@@ -21,6 +23,8 @@ public class SignInService implements SignInServiceInterface {
     @Autowired
     private UserSession userSession; // Session Bean managed by Spring.
 
+    @Autowired
+    private UserRepository userRepository;
     /**
      * Authenticates a user's credentials.
      * 
@@ -30,9 +34,11 @@ public class SignInService implements SignInServiceInterface {
      */
     @Override
     public boolean authenticate(String username, String password) {
-        // Hardcoded test credentials
-        if ("testuser".equals(username) && "Pass12345!".equals(password)) {
-            userSession.setUsername(username); // Store username in session.
+        //test credentials
+        UserModel user = userRepository.findByUsername(username);
+        if (user != null && password.equals(user.getPassword())) {
+            userSession.setUsername(user.getUsername());
+            userSession.setRole(user.getRole());
             return true;
         }
         return false;

@@ -56,6 +56,25 @@ public class UserRepository implements DataAccessInterface<UserModel> {
 		return null;
 	}
 
+	public UserModel findByUsername(String username) {
+        String sql = "SELECT * FROM USERS WHERE USERNAME = ?";
+        try {
+            SqlRowSet srs = jdbcTemplate.queryForRowSet(sql, username);
+
+            if (srs.next()) {
+                UserModel user = new UserModel();
+                user.setId(srs.getLong("ID"));
+                user.setUsername(srs.getString("USERNAME"));
+                user.setPassword(srs.getString("PASSWORD"));
+                return user;
+            }
+        } catch (Exception e) {
+            System.out.println("Error finding user by username: " + e.getMessage());
+        }
+        return null;
+    }
+
+
 	@Override
 	public boolean create(UserModel user) {
 

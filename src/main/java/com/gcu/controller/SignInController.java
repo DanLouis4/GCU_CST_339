@@ -12,7 +12,6 @@
  */
 
 package com.gcu.controller;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,10 +20,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
+import com.gcu.dao.repository.UserRepository;
 import com.gcu.business.SignInServiceInterface;
 import com.gcu.model.UserModel;
-
 import jakarta.validation.Valid;
 
 @Controller
@@ -32,6 +30,9 @@ public class SignInController {
 
     @Autowired
     private SignInServiceInterface service; // Business layer (IoC)
+
+    @Autowired
+    private UserRepository userRepository;
 
     /**
      * GET request to display the sign-in form.
@@ -72,11 +73,14 @@ public class SignInController {
         }
 
         // Delegate authentication to service layer.
-        boolean authenticated = service.authenticate(
-                userModel.getUsername(), userModel.getPassword());
+        UserModel user = userRepository.findByUsername(userModel.getUsername());
+
+        // login success
+
 
         // If successful, redirect to the user profile.
-        if (authenticated) {
+            if (user != null && userModel.getPassword().equals(user.getPassword())) 
+        {
             model.addAttribute("headerTemplate", "layouts/common-user");
             return "redirect:/userprofile";
         }

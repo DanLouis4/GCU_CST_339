@@ -1,15 +1,14 @@
 package com.gcu.dao.repository;
 
-import com.gcu.data.DataAccessInterface;
-import com.gcu.model.ProductModel;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Repository;
 
-import javax.sql.DataSource;
-import java.util.ArrayList;
-import java.util.List;
+import com.gcu.data.DataAccessInterface;
+import com.gcu.model.ProductModel;
 
 /**
  * ProductRepository
@@ -21,32 +20,28 @@ import java.util.List;
  * - Inserts new product records linked to a restaurant.
  * - Retrieves product lists for all or specific restaurant owners.
  */
-
 @Repository
 public class ProductRepository implements DataAccessInterface<ProductModel>
 {
-    // ----------------------------
-    // Variables
-    // ----------------------------
+    @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    // ----------------------------
-    // Constructor
-    // ----------------------------
-    @Autowired
-    public ProductRepository(DataSource dataSource)
+    /**
+     * Default constructor.
+     */
+    public ProductRepository()
     {
-        this.jdbcTemplate = new JdbcTemplate(dataSource);
+        // Default constructor
     }
 
-    // ----------------------------
+    // -------------------------------------
     // DataAccessInterface Methods
-    // ----------------------------
+    // -------------------------------------
 
     /**
-     * Retrieves all product records across all restaurants.
+     * Retrieves all products from the database.
      * 
-     * @return A List of ProductModel objects.
+     * @return List of ProductModel objects containing all product records.
      */
     @Override
     public List<ProductModel> findAll()
@@ -55,51 +50,124 @@ public class ProductRepository implements DataAccessInterface<ProductModel>
 
         try
         {
-            String sql = "SELECT id, name, description, price, restaurant_id FROM products";
+            String sql = "SELECT id, name, description, price, restaurant_id, imageURL FROM products";
             SqlRowSet srs = jdbcTemplate.queryForRowSet(sql);
 
             while (srs.next())
             {
                 products.add(new ProductModel(
-                        srs.getInt("id"),
-                        srs.getString("name"),
-                        srs.getString("description"),
-                        srs.getDouble("price"),
-                        srs.getInt("restaurant_id")
+                    srs.getInt("id"),
+                    srs.getString("name"),
+                    srs.getString("description"),
+                    srs.getDouble("price"),
+                    srs.getInt("restaurant_id"),
+                    srs.getString("imageURL")
                 ));
             }
         }
         catch (Exception e)
         {
             e.printStackTrace();
+            return null;
         }
 
         return products;
     }
 
     /**
-     * Creates a new product record linked to a restaurant.
+     * Retrieves all products linked to a specific restaurant.
      * 
-     * @param product The ProductModel containing data to insert.
-     * @return true if successful; false otherwise.
+     * @param restaurantId The restaurant ID to filter products by.
+     * @return List of ProductModel objects belonging to the specified restaurant.
+     */
+    public List<ProductModel> findByRestaurantId(long restaurantId)
+    {
+        List<ProductModel> products = new ArrayList<>();
+
+        try
+        {
+            String sql = "SELECT id, name, description, price, restaurant_id, imageURL FROM products WHERE restaurant_id = ?";
+            SqlRowSet srs = jdbcTemplate.queryForRowSet(sql, restaurantId);
+
+            while (srs.next())
+            {
+                products.add(new ProductModel(
+                    srs.getInt("id"),
+                    srs.getString("name"),
+                    srs.getString("description"),
+                    srs.getDouble("price"),
+                    srs.getInt("restaurant_id"),
+                    srs.getString("imageURL")
+                ));
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return null;
+        }
+
+        return products;
+    }
+
+    /**
+     * Retrieves a single product record by its ID.
+     * 
+     * @param id The product ID.
+     * @return ProductModel containing the product details.
+     */
+    @Override
+    public ProductModel findById(int id)
+    {
+        ProductModel product = null;
+
+        try
+        {
+            String sql = "SELECT id, name, description, price, restaurant_id, imageURL FROM products WHERE id = ?";
+            SqlRowSet srs = jdbcTemplate.queryForRowSet(sql, id);
+
+            if (srs.next())
+            {
+                product = new ProductModel(
+                    srs.getInt("id"),
+                    srs.getString("name"),
+                    srs.getString("description"),
+                    srs.getDouble("price"),
+                    srs.getInt("restaurant_id"),
+                    srs.getString("imageURL")
+                );
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return null;
+        }
+
+        return product;
+    }
+
+    /**
+     * Creates a new product record in the database.
+     * 
+     * @param product The ProductModel object containing the product data.
+     * @return true if creation succeeded; false otherwise.
      */
     @Override
     public boolean create(ProductModel product)
     {
+        String sql = "INSERT INTO products (name, description, price, restaurant_id, imageURL) VALUES (?, ?, ?, ?, ?)";
+
         try
         {
-            String sql = """
-                INSERT INTO products (name, description, price, restaurant_id)
-                VALUES (?, ?, ?, ?)
-            """;
-
             int rows = jdbcTemplate.update(sql,
                     product.getName(),
                     product.getDescription(),
                     product.getPrice(),
-                    product.getRestaurantId());
+                    product.getRestaurantId(),
+                    product.getImageURL());
 
-            return rows == 1;
+            return rows > 0;
         }
         catch (Exception e)
         {
@@ -108,71 +176,57 @@ public class ProductRepository implements DataAccessInterface<ProductModel>
         }
     }
 
-    // ----------------------------
-    // Custom Methods
-    // ----------------------------
-
     /**
-     * Retrieves all products belonging to a specific restaurant owner.
+     * Updates an existing product record in the database.
      * 
-     * @param username The restaurant owner’s username.
-     * @return A List of ProductModel objects.
+     * @param product The ProductModel object with updated information.
+     * @return true if update succeeded; false otherwise.
      */
-    public List<ProductModel> findByOwner(String username)
+    @Override
+    public boolean update(ProductModel product)
     {
-        List<ProductModel> products = new ArrayList<>();
+        String sql = "UPDATE products SET name = ?, description = ?, price = ?, restaurant_id = ?, imageURL = ? WHERE id = ?";
 
         try
         {
-            String sql = """
-                SELECT p.id, p.name, p.description, p.price, p.restaurant_id
-                FROM products p
-                JOIN restaurants r ON p.restaurant_id = r.id
-                JOIN users u ON r.owner_id = u.id
-                WHERE u.username = ?
-            """;
+            int rows = jdbcTemplate.update(sql,
+                    product.getName(),
+                    product.getDescription(),
+                    product.getPrice(),
+                    product.getRestaurantId(),
+                    product.getId(),
+                    product.getImageURL());
 
-            SqlRowSet srs = jdbcTemplate.queryForRowSet(sql, username);
-
-            while (srs.next())
-            {
-                products.add(new ProductModel(
-                        srs.getInt("id"),
-                        srs.getString("name"),
-                        srs.getString("description"),
-                        srs.getDouble("price"),
-                        srs.getInt("restaurant_id")
-                ));
-            }
+            return rows > 0;
         }
         catch (Exception e)
         {
             e.printStackTrace();
+            return false;
         }
-
-        return products;
     }
 
-	@Override
-	public ProductModel findById(int id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    /**
+     * Deletes a product record from the database by its ID.
+     * 
+     * @param id The ID of the product to delete.
+     * @return true if deletion succeeded; false otherwise.
+     */
+    @Override
+    public boolean delete(ProductModel product)
+    {
+        String sql = "DELETE FROM products WHERE id = ?";
 
-	@Override
-	public boolean update(ProductModel t) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+        try
+        {
+            int rows = jdbcTemplate.update(sql, product.getId());
+            return rows > 0;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
-	@Override
-	public boolean delete(ProductModel t) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-	
-	public JdbcTemplate getJdbcTemplate()
-	{
-	    return jdbcTemplate;
-	}
 }

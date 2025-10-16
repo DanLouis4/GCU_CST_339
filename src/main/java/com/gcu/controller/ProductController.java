@@ -1,229 +1,194 @@
-//package com.gcu.controller;
-//
-//import com.gcu.business.ProductServiceInterface;
-//import com.gcu.model.ProductModel;
-//import jakarta.validation.Valid;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.stereotype.Controller;
-//import org.springframework.ui.Model;
-//import org.springframework.validation.BindingResult;
-//import org.springframework.web.bind.annotation.*;
-//
-//import java.util.List;
-//
-//@Controller
-//public class ProductController {
-//
-//    @Autowired
-//    private ProductServiceInterface productService;
-//
-//    // Show form
-//    @GetMapping("/new")
-//    public String showNewProductForm(Model model) {
-//        model.addAttribute("productModel", new ProductModel());
-//        model.addAttribute("headerTemplate", "layouts/common-user");
-//        return "productnew";
-//    }
-//
-//    // Save product
-//    @PostMapping("/save")
-//    public String saveProduct(
-//            @Valid @ModelAttribute("productModel") ProductModel product,
-//            BindingResult result,
-//            Model model) {
-//
-//        if (result.hasErrors()) {
-//            model.addAttribute("headerTemplate", "layouts/common-user");
-//            return "productnew";
-//        }
-//
-//        productService.createProduct(product);
-//        model.addAttribute("headerTemplate", "layouts/common-user");
-//        return "redirect:/restaurantadmin?successMessage=true";
-//    }
-//
-//    // Show all products
-//    @GetMapping("/productnew")
-//    public String showProducts(
-//            @RequestParam(value = "success", required = false) String success,
-//            Model model) {
-//
-//        List<ProductModel> productList = productService.getAllProducts();
-//        model.addAttribute("productList", productList);
-//
-//        if (success != null) {
-//            model.addAttribute("message", "Product added successfully!");
-//        }
-//
-//        return "restaurantadmin";
-//    }
-//    @GetMapping("/products/menu") 
-//    public String viewRestaurantMenu(Model model) {
-//        List<ProductModel> products = productService.getAllProducts();
-//        model.addAttribute("products", products);
-//        model.addAttribute("restaurantName", "Speed-E-Eats");
-//        model.addAttribute("headerTemplate", "layouts/common-user");
-//        return "restaurantmenu"; 
-//    }
-//
-//}
 package com.gcu.controller;
 
-import com.gcu.business.ProductServiceInterface;
-import com.gcu.business.UserSession;
-import com.gcu.model.ProductModel;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 
-import java.util.List;
+import com.gcu.business.ProductServiceInterface;
+import com.gcu.business.RestaurantServiceInterface;
+import com.gcu.business.UserSession;
+import com.gcu.model.ProductModel;
+import com.gcu.model.RestaurantModel;
 
-//@Controller
-//@RequestMapping("/products")
-//public class ProductController {
-//
-//    @Autowired
-//    private ProductServiceInterface productService;
-//
-//    // Show form
-//    @GetMapping("/new")
-//    public String showNewProductForm(Model model) {
-//        model.addAttribute("productModel", new ProductModel());
-//        model.addAttribute("headerTemplate", "layouts/common-user");
-//        return "productnew";
-//    }
-//
-//    // Save product
-//    @PostMapping("/save")
-//    public String saveProduct(
-//            @Valid @ModelAttribute("productModel") ProductModel product,
-//            BindingResult result,
-//            Model model) {
-//
-//        if (result.hasErrors()) {
-//            model.addAttribute("headerTemplate", "layouts/common-user");
-//            return "productnew";
-//        }
-//
-//        productService.createProduct(product);
-//        model.addAttribute("headerTemplate", "layouts/common-user");
-//        return "redirect:/restaurantadmin?successMessage=true";
-//    }
-//
-//    // Show all products
-//    @GetMapping("/productnew")
-//    public String showProducts(
-//            @RequestParam(value = "success", required = false) String success,
-//            Model model) {
-//
-//        List<ProductModel> productList = productService.getAllProducts();
-//        model.addAttribute("productList", productList);
-//
-//        if (success != null) {
-//            model.addAttribute("message", "Product added successfully!");
-//        }
-//
-//        return "restaurantadmin";
-//    }
-//    @GetMapping("/products/menu") 
-//    public String viewRestaurantMenu(Model model) {
-//        List<ProductModel> products = productService.getAllProducts();
-//        model.addAttribute("products", products);
-//        model.addAttribute("restaurantName", "Speed-E-Eats");
-//        model.addAttribute("headerTemplate", "layouts/common-user");
-//        return "restaurantmenu"; 
-//    }
-//
-//}
+/**
+ * ProductController
+ * ----------------------------
+ * Handles all product-related page requests.
+ * 
+ * Responsibilities:
+ * - Displays all products (menu items) for a selected restaurant.
+ * - Provides routes for adding, updating, and deleting products.
+ * - Ensures that all product operations are scoped to the logged-in user's restaurants.
+ */
 @Controller
-public class ProductController {
-
+public class ProductController
+{
     @Autowired
     private ProductServiceInterface productService;
     
     @Autowired
+    private RestaurantServiceInterface restaurantService;
+
+    @Autowired
     private UserSession userSession;
 
-    @GetMapping("/new")
-    public String showNewProductForm(Model model) {
-        model.addAttribute("productModel", new ProductModel());
-        model.addAttribute("headerTemplate", "layouts/common-user");
-        return "productnew";
+    /**
+     * Default constructor.
+     */
+    public ProductController()
+    {
+        // Default constructor
     }
 
-    @PostMapping("/save") // ✅ This now matches @{/save}
-    public String saveProduct(
-            @Valid @ModelAttribute("productModel") ProductModel product,
-            BindingResult result,
-            Model model) {
+    // -------------------------------------
+    // VIEWING PRODUCTS
+    // -------------------------------------
 
-        if (result.hasErrors()) {
+    /**
+     * Displays the Admin Menu page for a specific restaurant.
+     * 
+     * @param restaurantId The restaurant ID whose menu will be managed.
+     * @param model Spring Model to pass restaurant and product data.
+     * @return restaurantmenuadmin.html view.
+     */
+    @GetMapping("/restaurants/menu/{restaurantId}")
+    public String showRestaurantMenuAdmin(@PathVariable int restaurantId, Model model)
+    {
+        try
+        {
+            // Validate session
+            String loggedInUser = userSession.getUsername();
+            if (loggedInUser == null)
+            {
+                return "redirect:/signin";
+            }
+
+            RestaurantModel restaurant = restaurantService.findById(restaurantId);
+            
+            // Retrieve all products for the given restaurant
+            model.addAttribute("products", productService.findByRestaurantId(restaurantId));
+
+            
+             
+            model.addAttribute("products", productService.findByRestaurantId(restaurantId));
+            model.addAttribute("restaurantId", restaurantId);
+            model.addAttribute("restaurantName", restaurant.getName());
+            model.addAttribute("headerTemplate", "layouts/common-user");
+            return "restaurantmenuadmin";
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return "error";
+        }
+    }
+
+    // -------------------------------------
+    // ADDING NEW PRODUCTS
+    // -------------------------------------
+
+    /**
+     * Displays the Add New Product form for a specific restaurant.
+     * 
+     * @param restaurantId The restaurant ID that this new product will be linked to.
+     * @param model Spring Model to pass data to the view.
+     * @return productnew.html Thymeleaf form view for creating a new product.
+     */
+    @GetMapping("/products/new/{restaurantId}")
+    public String showAddProductForm(@PathVariable int restaurantId, Model model)
+    {
+        try
+        {
+            // Validate user session
+            if (userSession.getUsername() == null)
+            {
+                return "redirect:/signin";
+            }
+
+            // Prepare new product model for binding
+            ProductModel product = new ProductModel();
+            product.setRestaurantId(restaurantId);
+            model.addAttribute("productModel", product);
+
             model.addAttribute("headerTemplate", "layouts/common-user");
             return "productnew";
         }
-        
-        // Retrieve the restaurant ID of the logged-in owner
-        int restaurantId = productService.getRestaurantIdByUsername(userSession.getUsername());
-
-        // Assign the restaurant ID to the product before saving
-        product.setRestaurantId(restaurantId);
-
-        // Existing logic — no need to change the call here
-        boolean isSaved = productService.createProduct(product);
-        
-        if (isSaved) {
-            model.addAttribute("successMessage", "Product added successfully!");
-        } else {
-            model.addAttribute("errorMessage", "Failed to add product. Please try again.");
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return "error";
         }
-        
-        model.addAttribute("headerTemplate", "layouts/common-user");
-        return "redirect:/restaurantadmin?successMessage=true";
     }
 
-    @GetMapping("/productnew")
-    public String showProducts(@RequestParam(value = "success", required = false) String success, Model model) {
-        List<ProductModel> productList = productService.getAllProducts(userSession.getUsername());
-        model.addAttribute("productList", productList);
-        
-        
-        
-        if (success != null) {
-            model.addAttribute("message", "Product added successfully!");
+    /**
+     * Handles POST submission for creating a new product.
+     * 
+     * @param product The ProductModel object bound from the form.
+     * @return Redirects back to the restaurant's product list after successful creation.
+     */
+    @PostMapping("/products/save")
+    public String saveProduct(@ModelAttribute("productModel") ProductModel product)
+    {
+        try
+        {
+            // Persist the product
+            boolean success = productService.create(product);
+
+            if (success)
+            {
+                System.out.println("Product successfully created: " + product.getName());
+            }
+            else
+            {
+                System.err.println("Failed to create product: " + product.getName());
+            }
+
+            // Redirect back to the restaurant's menu
+            return "redirect:/products/" + product.getRestaurantId();
         }
-        return "restaurantadmin";
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return "error";
+        }
     }
 
-    @GetMapping("/products/menu")
-    public String viewRestaurantMenu(Model model) {
-        List<ProductModel> products = productService.getAllProducts(userSession.getUsername());
-        model.addAttribute("products", products);
-        model.addAttribute("restaurantName", "Speed-E-Eats");
-        model.addAttribute("headerTemplate", "layouts/common-user");
-        return "restaurantmenu";
+    // -------------------------------------
+    // DELETING PRODUCTS
+    // -------------------------------------
+
+    /**
+     * Handles product deletion.
+     * 
+     * @param product The ProductModel containing the product to delete.
+     * @return Redirects back to the restaurant's menu after deletion.
+     */
+    @PostMapping("/products/delete")
+    public String deleteProduct(@ModelAttribute("productModel") ProductModel product)
+    {
+        try
+        {
+            boolean success = productService.delete(product);
+
+            if (success)
+            {
+                System.out.println("Product deleted successfully: ID " + product.getId());
+            }
+            else
+            {
+                System.err.println("Failed to delete product: ID " + product.getId());
+            }
+
+            return "redirect:/products/" + product.getRestaurantId();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return "error";
+        }
     }
-  
-
-    @GetMapping("/edit/{id}")
-    public String editProductForm(@PathVariable Long id, Model model) {
-        
-    	// TODO in later milestones.
-		
-    	return null;
-    }
-
-
-    @GetMapping("/delete/{id}")
-    public String deleteProduct(@PathVariable Long id, RedirectAttributes redirectAttributes) {
-    
-    	// TODO in later milestones.
-		
-    	return null;
-		
-    }
-
 }

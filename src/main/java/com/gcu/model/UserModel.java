@@ -51,7 +51,8 @@ public class UserModel {
     public UserModel() {}
 
     /** Full constructor used during sign-up or testing. */
-    public UserModel(String firstName, String lastName, String username, String email, String password, String role) {
+    public UserModel(Long id, String firstName, String lastName, String username, String email, String password, String role) {
+    	this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;

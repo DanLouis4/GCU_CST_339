@@ -53,8 +53,8 @@
 
             <!-- MANAGE RESTAURANT (visible for RESTAURANT role only) -->
             <div class="mt-4" th:if="${role == 'RESTAURANT'}">
-                <a th:href="@{/restaurantadmin}" class="btn btn-primary w-100 fw-semibold mb-2">
-                    Manage My Restaurant
+                <a th:href="@{/restaurantmanager}" class="btn btn-primary w-100 fw-semibold mb-2">
+                    Manage My Restaurant(s)
                 </a>
             </div>
 
@@ -63,7 +63,6 @@
                     <a th:href="@{/}" class="btn btn-danger w-100 fw-semibold">
                         Sign Out
                     </a>
-                </form>
             </div>
 
         </div>

@@ -77,6 +77,11 @@
 			<artifactId>topic4-1</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+		<dependency>
+			<groupId>com.gcu</groupId>
+			<artifactId>CLC-milestone2</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 	<build>
 	<finalName>speed-e-eats</finalName>

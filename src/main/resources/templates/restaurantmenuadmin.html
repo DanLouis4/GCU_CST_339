@@ -46,10 +46,11 @@
         </table>
 
         <!-- Admin Actions -->
-        <div class="mt-4">
-            <a th:href="@{/new}" class="btn btn-success me-2">+ Add New Product</a>
-            <a th:href="@{/restaurantmenu}" class="btn btn-outline-primary">View Restaurant Menu</a>
-        </div>
+		<!-- Admin Actions -->
+		<div class="mt-4">
+		    <a th:href="@{'/products/new/' + ${restaurantId}}" class="btn btn-success me-2">+ Add New Product</a>
+		    <a th:href="@{'/products/' + ${restaurantId}}" class="btn btn-outline-primary">View Restaurant Menu</a>
+		</div>
     </section>
 	</body>
 </html>

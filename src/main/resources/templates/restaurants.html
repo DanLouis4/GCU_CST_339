@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/defaultTemplate}">
+<head>
+    <title>Restaurants</title>
+</head>
+<body>
+<section layout:fragment="content" class="container mt-5 mb-5">
+
+    <!-- RESTAURANT CARDS -->
+    <div th:if="${restaurants != null}">
+        <div th:each="restaurant : ${restaurants}" 
+             class="card shadow-sm mb-4 border-0" 
+             style="border-radius: 12px; border-bottom: 1px dotted black;">
+
+            <div class="row g-0 align-items-center">
+
+                <!-- RESTAURANT IMAGE -->
+                <div class="col-md-4 text-center p-3 background-cover">
+                    <div class="bg-secondary d-flex align-items-center justify-content-center text-white rounded" 
+                         style="width: 100%; height: 180px;">
+                        <span>Image</span>
+                    </div>
+                </div>
+
+                <!-- RESTAURANT DETAILS -->
+                <div class="col-md-8">
+                    <div class="card-body">
+
+                        <h5 class="card-title fw-bold mb-1" 
+                            th:text="${restaurant.name}">[Restaurant Name]</h5>
+                        <p class="mb-1" th:text="${restaurant.address}">[Address]</p>
+                        <p class="mb-3" th:text="${restaurant.phone}">[Phone]</p>
+
+                        <p class="text-muted small mb-3" th:text="${restaurant.description}">
+                            Restaurant Description.
+                        </p>
+
+                        <!-- STATISTICS -->
+                        <div class="d-flex justify-content-start gap-4 mb-3">
+                            <p class="mb-0">Total Items: <strong>0</strong></p>
+                            <p class="mb-0">Total Orders: <strong>0</strong></p>
+                        </div>
+                   </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

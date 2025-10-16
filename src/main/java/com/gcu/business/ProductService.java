@@ -1,89 +1,157 @@
 package com.gcu.business;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.gcu.business.ProductServiceInterface;
 import com.gcu.dao.repository.ProductRepository;
 import com.gcu.model.ProductModel;
 
 /**
  * ProductService
  * ----------------------------
- * Implements ProductServiceInterface to provide business logic
- * for managing products.
+ * Implements ProductServiceInterface to manage product business logic.
+ * Acts as the intermediary between the controller and repository layers.
  * 
  * Responsibilities:
- * - Retrieves and creates products using ProductRepository.
- * - Acts as an intermediary between controllers and the data access layer.
+ * - Handles CRUD operations for products.
+ * - Delegates database interaction to ProductRepository.
+ * - Provides filtering for products by restaurant.
  */
-
 @Service
 public class ProductService implements ProductServiceInterface
 {
-    // ----------------------------
-    // Variables
-    // ----------------------------
     @Autowired
     private ProductRepository productRepository;
-    
-    
-
-    // ----------------------------
-    // Methods
-    // ----------------------------
 
     /**
-     * Retrieves all products from the database.
-     * 
-     * @return List of ProductModel objects.
+     * Default constructor.
      */
-    @Override
-    public List<ProductModel> getAllProducts(String username)
+    public ProductService()
     {
-        return productRepository.findByOwner(username);
+        // Default constructor
     }
 
+    // -------------------------------------
+    // DataAccessInterface Methods
+    // -------------------------------------
+
     /**
-     * Retrieves the restaurant ID associated with the logged-in user.
+     * Retrieves all product records from the database.
      * 
-     * @param username The username of the restaurant owner.
-     * @return The restaurant ID if found; 0 otherwise.
+     * @return List of ProductModel objects representing all products.
      */
-    public int getRestaurantIdByUsername(String username)
+    @Override
+    public List<ProductModel> findAll()
     {
         try
         {
-            String sql = """
-                SELECT r.id
-                FROM restaurants r
-                JOIN users u ON r.owner_id = u.id
-                WHERE u.username = ?
-            """;
-
-            // Use ProductRepository's JdbcTemplate to run this query
-            return productRepository.getJdbcTemplate().queryForObject(sql, Integer.class, username);
+            return productRepository.findAll();
         }
         catch (Exception e)
         {
             e.printStackTrace();
-            return 0;
+            return null;
         }
     }
-    
-    
+
     /**
-     * Creates a new product record.
+     * Retrieves a single product record by its ID.
      * 
-     * @param product The product model containing the new product details.
+     * @param id The product's unique identifier.
+     * @return The ProductModel object containing the product details.
+     */
+    @Override
+    public ProductModel findById(int id)
+    {
+        try
+        {
+            return productRepository.findById(id);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * Retrieves all products linked to a specific restaurant.
+     * 
+     * @param restaurantId The restaurant ID to filter products by.
+     * @return List of ProductModel objects for that restaurant.
+     */
+    @Override
+    public List<ProductModel> findByRestaurantId(int restaurantId)
+    {
+        try
+        {
+            return productRepository.findByRestaurantId(restaurantId);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * Creates a new product record in the database.
+     * 
+     * @param product The ProductModel object containing product data.
      * @return true if the product was successfully created; false otherwise.
      */
     @Override
-    public boolean createProduct(ProductModel product)
+    public boolean create(ProductModel product)
     {
-        return productRepository.create(product);
+        try
+        {
+            return productRepository.create(product);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return false;
+        }
     }
 
+    /**
+     * Updates an existing product record in the database.
+     * 
+     * @param product The ProductModel object with updated information.
+     * @return true if the product was successfully updated; false otherwise.
+     */
+    @Override
+    public boolean update(ProductModel product)
+    {
+        try
+        {
+            return productRepository.update(product);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
+     * Deletes a product record from the database.
+     * 
+     * @param product The ProductModel object to delete.
+     * @return true if deletion succeeded; false otherwise.
+     */
+    @Override
+    public boolean delete(ProductModel product)
+    {
+        try
+        {
+            return productRepository.delete(product);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

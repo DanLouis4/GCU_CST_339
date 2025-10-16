@@ -3,7 +3,6 @@ package com.gcu.business;
 import com.gcu.dao.repository.UserRepository;
 import com.gcu.model.UserModel;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 /**
@@ -23,17 +22,14 @@ public class SignUpService implements SignUpServiceInterface
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
-
     /**
      * Registers a new user.
      * 
-     * After successful registration, if the user’s role
-     * is "RESTAURANT", a default restaurant record is automatically
-     * created and linked to the user. This allows restaurant
-     * owners to immediately manage products without having to
-     * create a restaurant entry manually.
+     * Handles the creation of a new user record in the database.
+     * This version no longer auto-generates a default restaurant
+     * for users with the "RESTAURANT" role. Restaurant creation
+     * will now be managed manually by the user through the
+     * application interface.
      * 
      * @param newUser The registration form model.
      * @return true if registration succeeds; false otherwise.
@@ -41,31 +37,25 @@ public class SignUpService implements SignUpServiceInterface
     @Override
     public boolean register(UserModel newUser)
     {
-        boolean success = userRepository.create(newUser);
-
-        // Auto-insert a default restaurant for RESTAURANT users
-        if (success && "RESTAURANT".equalsIgnoreCase(newUser.getRole()))
+        try
         {
-            try
-            {
-                String restaurantSql = """
-                    INSERT INTO restaurants (name, owner_id, address, phone)
-                    VALUES ('Speed-E-Eats Deli',
-                            (SELECT id FROM users WHERE username = ? LIMIT 1),
-                            '123 Main St, Phoenix, AZ',
-                            '555-123-4567');
-                """;
+            // Attempt to create the new user
+            boolean success = userRepository.create(newUser);
 
-                jdbcTemplate.update(restaurantSql, newUser.getUsername());
-                System.out.println("Default restaurant created for: " + newUser.getUsername());
-            }
-            catch (Exception e)
+            if (!success)
             {
-                e.printStackTrace();
-                System.err.println("Failed to auto-create restaurant for user: " + newUser.getUsername());
+                System.err.println("User registration failed for: " + newUser.getUsername());
+                return false;
             }
+
+            System.out.println("User registered successfully: " + newUser.getUsername());
+            return true;
         }
-
-        return success;
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            System.err.println("An error occurred during registration for user: " + newUser.getUsername());
+            return false;
+        }
     }
 }

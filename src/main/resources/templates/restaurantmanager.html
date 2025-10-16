@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/defaultTemplate}">
+<head>
+    <title>Restaurant Manager</title>
+</head>
+<body>
+<section layout:fragment="content" class="container mt-5 mb-5">
+
+    <!-- PAGE HEADER -->
+    <h2 class="fw-bold text-primary mb-4">Restaurant Manager</h2>
+
+    <!-- RESTAURANT CARDS -->
+    <div th:if="${restaurants != null}">
+        <div th:each="restaurant : ${restaurants}" 
+             class="card shadow-sm mb-4 border-0" 
+             style="border-radius: 12px; border-bottom: 1px dotted black;">
+
+            <div class="row g-0 align-items-center">
+
+                <!-- RESTAURANT IMAGE -->
+                <div class="col-md-4 text-center p-3">
+                    <div class="bg-secondary d-flex align-items-center justify-content-center text-white rounded" 
+                         style="width: 100%; height: 180px;">
+                        <span>Image</span>
+                    </div>
+                </div>
+
+                <!-- RESTAURANT DETAILS -->
+                <div class="col-md-8">
+                    <div class="card-body">
+
+                        <h5 class="card-title fw-bold mb-1" 
+                            th:text="${restaurant.name}">[Restaurant Name]</h5>
+                        <p class="mb-1" th:text="${restaurant.address}">[Address]</p>
+                        <p class="mb-3" th:text="${restaurant.phone}">[Phone]</p>
+
+                        <p class="text-muted small mb-3" th:text="${restaurant.description}">
+                            Manage your restaurant settings and menu items below.
+                        </p>
+
+                        <!-- STATISTICS -->
+                        <div class="d-flex justify-content-start gap-4 mb-3">
+                            <p class="mb-0">Total Items: <strong>0</strong></p>
+                            <p class="mb-0">Total Orders: <strong>0</strong></p>
+                        </div>
+
+                        <!-- ACTION BUTTONS -->
+                        <div class="d-flex gap-2">
+							<a th:href="@{'/restaurants/edit/' + ${restaurant.id}}" class="btn btn-success btn-sm px-3">Edit Restaurant</a>
+							<a th:href="@{'/restaurants/menu/' + ${restaurant.id}}" class="btn btn-outline-success btn-sm px-3">Edit Menu</a>
+                            <a th:href="@{/restaurants/delete/{id}}" class="btn btn-danger btn-sm px-3">Delete</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADD RESTAURANT BUTTON -->
+    <div class="text-center mt-5">
+        <a th:href="@{/restaurants/new}" 
+           class="btn btn-primary btn-lg fw-semibold px-5 py-2">Add A Restaurant</a>
+    </div>
+
+</section>
+</body>
+</html>

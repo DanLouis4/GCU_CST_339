@@ -17,9 +17,6 @@ import org.springframework.stereotype.Service;
 import com.gcu.model.UserModel;
 import com.gcu.dao.repository.UserRepository;
 
-import com.gcu.dao.repository.UserRepository;
-import com.gcu.model.UserModel;
-
 @Service
 public class SignInService implements SignInServiceInterface {
 

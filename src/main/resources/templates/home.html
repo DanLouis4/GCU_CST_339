@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/defaultTemplate}">
+<head>
+    <title th:text="${title}">Title</title>
+</head>
+<body>
+<section layout:fragment="content" class="container mt-5 mb-5">
+	<div>
+		<h1 th:text="${loginSuccess}">Welcome back, User</h1>
+		<h2>Your recent orders</h2>
+		<p>small side scrolling cards of user's most recent orders...</p>
+		<h2>New Products Added...</h3>
+		<p>grid view of latest product cards </p>
+		<h2>New Restaurants Added...</h3>
+		<p>side scrolling card of new restaurants</p>
+		<h2>Specials, Deals and Coupons</h2>
+		<p>grid view of specials...</p>
+	</div>
+</section>
+</body>
+</html>

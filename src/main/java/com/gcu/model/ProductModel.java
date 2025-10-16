@@ -36,6 +36,7 @@ public class ProductModel
     private Double price;
 
     private int restaurantId;
+    private String imageURL;
 
     // ----------------------------
     // Constructors
@@ -53,15 +54,16 @@ public class ProductModel
      * @param name The product name.
      * @param description The product description.
      * @param price The product price.
-     * @param restaurantId The ID of the restaurant that owns the product.
+     * @param restaurantl The ID of the restaurant that owns the product.
      */
-    public ProductModel(int id, String name, String description, Double price, int restaurantId)
+    public ProductModel(int id, String name, String description, Double price, int restaurantId, String imageURL)
     {
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
         this.restaurantId = restaurantId;
+        this.imageURL = imageURL;
     }
 
     // ----------------------------
@@ -117,4 +119,12 @@ public class ProductModel
     {
         this.restaurantId = restaurantId;
     }
+
+	public String getImageURL() {
+		return imageURL;
+	}
+
+	public void setImageURL(String imageURL) {
+		this.imageURL = imageURL;
+	}
 }

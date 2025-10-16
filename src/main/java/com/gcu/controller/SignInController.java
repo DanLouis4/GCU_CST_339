@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import com.gcu.dao.repository.UserRepository;
 import com.gcu.business.SignInServiceInterface;
+import com.gcu.business.UserSession;
 import com.gcu.model.UserModel;
 
 @Controller
@@ -32,6 +33,9 @@ public class SignInController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private UserSession userSession;
+    
     /**
      * GET request to display the sign-in form.
      * 
@@ -80,17 +84,14 @@ public class SignInController {
 
         // Login success
         if (isAuthenticated)
-        {        	
-            model.addAttribute("headerTemplate", "layouts/common-user");
-            model.addAttribute("loginSuccess", "Welcome back, " + userModel.getUsername() + "!");
-            return "redirect:/userprofile";
-        }
-        
-        // If successful, redirect to the user profile.
-            if (user != null && userModel.getPassword().equals(user.getPassword())) 
         {
+        	userSession.setId(user.getId());
+        	userSession.setUsername(user.getUsername());
+        	userSession.setRole(user.getRole());
+
             model.addAttribute("headerTemplate", "layouts/common-user");
-            return "redirect:/userprofile";
+            model.addAttribute("loginSuccess", "Welcome back, " + user.getUsername() + "!");
+            return "redirect:/home";
         }
 
         // On failure, redisplay form with error message.

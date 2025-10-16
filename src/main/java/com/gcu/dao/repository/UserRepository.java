@@ -16,6 +16,7 @@ import com.gcu.model.UserModel;
 @Repository
 public class UserRepository implements DataAccessInterface<UserModel> {
 
+	@SuppressWarnings("unused")
 	@Autowired
 	private DataSource dataSource;
 	
@@ -38,6 +39,7 @@ public class UserRepository implements DataAccessInterface<UserModel> {
             SqlRowSet srs = jdbcTemplate.queryForRowSet(sql);
             while (srs.next()) {
                 users.add(new UserModel(
+                	srs.getLong("id"),	
                     srs.getString("first_name"),
                     srs.getString("last_name"),
                     srs.getString("username"),
@@ -69,7 +71,8 @@ public class UserRepository implements DataAccessInterface<UserModel> {
 	        """;
 
 	        return jdbcTemplate.queryForObject(sql, (rs, rowNum) ->
-	            new UserModel(rs.getString("first_name"),
+	            new UserModel(rs.getLong("Id"),
+	            			  rs.getString("first_name"),
 	            			  rs.getString("last_name"),
 	            			  rs.getString("username"),
 	            			  rs.getString("email"),

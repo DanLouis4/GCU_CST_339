@@ -18,7 +18,8 @@ public class UserSession
     // ----------------------------
     // Fields
     // ----------------------------
-    private String username;
+    private long id;
+	private String username;
     private String firstName;
     private String lastName;
     private String email;
@@ -31,6 +32,23 @@ public class UserSession
     // Getters and Setters
     // ----------------------------
 
+    
+    /**
+     * Gets the Id of the current user.
+     * @return Id
+     */
+	public long getId() {
+		return id;
+	}
+
+    /**
+     * Sets the Id of the current user.
+     * @return Id
+     */
+	public void setId(long id) {
+		this.id = id;
+	}
+	
     /**
      * Gets the username of the current user.
      * @return username
@@ -144,4 +162,5 @@ public class UserSession
         this.role = null;
         this.passwordToken = "********************";
     }
+
 }

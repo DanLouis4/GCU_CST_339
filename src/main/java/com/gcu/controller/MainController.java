@@ -65,7 +65,10 @@ public class MainController
             model.addAttribute("email", userSession.getEmail());
             model.addAttribute("loginSuccess", "Welcome back, " + userSession.getFirstName() + "!");
 
-            // Add
+            // Add restaurants for the homepage carousel
+            model.addAttribute("restaurants", restaurantService.getAllRestaurants());
+            
+            // Common layout and metadata
         	model.addAttribute("headerTemplate", "layouts/common-user");    	
         	model.addAttribute("title", "Speed-E-Eats");
             

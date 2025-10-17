@@ -145,6 +145,57 @@ main {
     color: red;
 }
 
+/* ================================
+   Custom Bootstrap Cards
+   ================================ */
+.card.restaurant-card {
+  width: 315px;
+  height: 276px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+}
+
+.card.restaurant-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.card-img-top {
+  height: 172px;
+  background-color: #f2f2f2; /* substitute for .bg-75 */
+  object-fit: cover;
+  border-bottom: 1px solid #ddd;
+}
+
+.card-body {
+  padding: 10px 12px;
+  text-align: center;
+}
+
+.card-body h6 {
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin-bottom: 0.25rem;
+}
+
+.card-body p {
+  font-size: 0.85rem;
+  color: #666;
+  margin-bottom: 0.5rem;
+}
+
+.card a.btn-view {
+  display: block;
+  width: 100%;
+  height: 35px;
+  line-height: 35px;
+  margin: 0;
+  border-radius: 0;
+}
+
 
 /* ================================
    Footer

@@ -35,21 +35,22 @@
 			<tbody>
 				<tr th:each="product : ${products}">
 			    	<td th:text="${product.name}">Sample Product</td>
-			    	<td th:text="${product.description}">Sample description...</td>
+			    	<td style="width: 66%;" th:text="${product.description}">Sample description...</td>
 			    	<td>$<span th:text="${product.price}">0.00</span></td>
                     <td>
                         <a href="#" class="btn btn-sm btn-warning">Edit</a>
-                        <a href="#" class="btn btn-sm btn-danger">Delete</a>
+						<form th:action="@{'/product/delete/' + ${product.id}}" method="post" style="display:inline;">
+						    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+						</form>
                     </td>
                 </tr>
             </tbody>
         </table>
 
-        <!-- Admin Actions -->
 		<!-- Admin Actions -->
 		<div class="mt-4">
 		    <a th:href="@{'/products/new/' + ${restaurantId}}" class="btn btn-success me-2">+ Add New Product</a>
-		    <a th:href="@{'/products/' + ${restaurantId}}" class="btn btn-outline-primary">View Restaurant Menu</a>
+		    <a th:href="@{'/restaurantmenu/' + ${restaurantId}}" class="btn btn-outline-primary">View Restaurant Menu</a>
 		</div>
     </section>
 	</body>

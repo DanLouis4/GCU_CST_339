@@ -7,7 +7,8 @@
 </head>
 <body>
     <section layout:fragment="content" class="container mt-5">
-        <h2 th:text="${restaurantName} + ' Menu'">Sample Restaurant Menu</h2>
+        <h2 th:text="${restaurant.name} + ' Menu'">Sample Restaurant Menu</h2>
+		<p th:text="${restaurant.description}">Description...</p>
 
         <!-- Menu Table -->
         <table class="table table-hover mt-4">

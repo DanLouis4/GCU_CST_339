@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import com.gcu.business.ProductServiceInterface;
 import com.gcu.business.RestaurantServiceInterface;
 import com.gcu.business.UserSession;
 import com.gcu.model.RestaurantModel;
@@ -27,6 +28,9 @@ public class RestaurantController
 {
     @Autowired
     private RestaurantServiceInterface restaurantService;
+    
+    @Autowired
+    private ProductServiceInterface productService;
 
     @Autowired
     private UserSession userSession;
@@ -77,6 +81,48 @@ public class RestaurantController
             return "error";
         }
     }
+
+	 // -------------------------------------
+	 // VIEWING RESTAURANT MENU (PUBLIC VIEW)
+	 // -------------------------------------
+	
+	 /**
+	  * Displays a specific restaurant’s menu page for customers.
+	  *
+	  * @param id    The ID of the restaurant to view.
+	  * @param model Spring Model to pass restaurant and menu data to the view.
+	  * @return restaurantmenu.html Thymeleaf view.
+	  */
+	 @GetMapping("/restaurantmenu/{id}")
+	 public String showRestaurantMenu(@PathVariable("id") int id, Model model)
+	 {
+	     try
+	     {
+	         // Retrieve restaurant details
+	         RestaurantModel restaurant = restaurantService.findById(id);
+	         if (restaurant == null)
+	         {
+	             System.err.println("Restaurant not found for ID: " + id);
+	             return "redirect:/home";
+	         }
+	
+	         // Retrieve products associated with the restaurant
+	         model.addAttribute("restaurant", restaurant);
+	         model.addAttribute("products", productService.findByRestaurantId(id));
+	
+	         // Sets the correct navigation bar and layout
+	         model.addAttribute("headerTemplate", "layouts/common-user");
+	
+	         // Render restaurantmenu.html
+	         return "restaurantmenu";
+	     }
+	     catch (Exception e)
+	     {
+	         e.printStackTrace();
+	         System.err.println("Error loading restaurant menu for ID: " + id);
+	         return "error";
+	     }
+	 }    
 
     // -------------------------------------
     // ADDING NEW RESTAURANTS

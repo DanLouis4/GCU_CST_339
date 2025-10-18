@@ -7,10 +7,11 @@
 </head>
 <body>
     <section layout:fragment="content" class="container mt-5">
-        <h2>Create a New Product</h2>
+		<h2 th:text="${restaurant.name}">Restaurant</h2>
+        <h3>Create a New Product</h3>
 
         <!-- TODO: Complete Thymeleaf form fields -->
-        <form th:action="@{/save}" th:object="${productModel}" method="post" class="mt-4">
+        <form th:action="@{'/products/save/' + ${restaurant.id}} " th:object="${productModel}" method="post" class="mt-4">
 
             <!-- Product Name -->
             <div class="mb-3">
@@ -36,7 +37,7 @@
             </div>
 			
 			<!-- Hidden Restaurant ID -->
-			<input type="hidden" name="restaurantId" th:value="1" />
+			<input type="hidden" name="restaurantId" th:value="${restaurant.id}" />
 
             <!-- Submit Button -->
             <button type="submit" class="btn btn-danger">Save Product</button>

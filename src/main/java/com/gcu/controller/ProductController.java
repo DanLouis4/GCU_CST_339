@@ -35,6 +35,8 @@ public class ProductController
 
     @Autowired
     private UserSession userSession;
+    
+    RestaurantModel restaurant;
 
     /**
      * Default constructor.
@@ -55,7 +57,7 @@ public class ProductController
      * @param model Spring Model to pass restaurant and product data.
      * @return restaurantmenuadmin.html view.
      */
-    @GetMapping("/restaurants/menu/{restaurantId}")
+    @GetMapping("/restaurants/menu/admin/{restaurantId}")
     public String showRestaurantMenuAdmin(@PathVariable int restaurantId, Model model)
     {
         try
@@ -66,13 +68,11 @@ public class ProductController
             {
                 return "redirect:/signin";
             }
-
-            RestaurantModel restaurant = restaurantService.findById(restaurantId);
-            
+                      
             // Retrieve all products for the given restaurant
             model.addAttribute("products", productService.findByRestaurantId(restaurantId));
 
-            
+            restaurant = restaurantService.findById(restaurantId);
              
             model.addAttribute("products", productService.findByRestaurantId(restaurantId));
             model.addAttribute("restaurantId", restaurantId);
@@ -101,6 +101,7 @@ public class ProductController
     @GetMapping("/products/new/{restaurantId}")
     public String showAddProductForm(@PathVariable int restaurantId, Model model)
     {
+    	RestaurantModel restaurant = restaurantService.findById(restaurantId);
         try
         {
             // Validate user session
@@ -113,7 +114,7 @@ public class ProductController
             ProductModel product = new ProductModel();
             product.setRestaurantId(restaurantId);
             model.addAttribute("productModel", product);
-
+            model.addAttribute("restaurant", restaurant);
             model.addAttribute("headerTemplate", "layouts/common-user");
             return "productnew";
         }
@@ -130,9 +131,12 @@ public class ProductController
      * @param product The ProductModel object bound from the form.
      * @return Redirects back to the restaurant's product list after successful creation.
      */
-    @PostMapping("/products/save")
-    public String saveProduct(@ModelAttribute("productModel") ProductModel product)
+    @PostMapping("/products/save/{restaurantId}")
+    public String saveProduct(@ModelAttribute("productModel") ProductModel product, Model model)
     {
+    	
+    	restaurant = restaurantService.findById(product.getRestaurantId());
+    	
         try
         {
             // Persist the product
@@ -146,9 +150,19 @@ public class ProductController
             {
                 System.err.println("Failed to create product: " + product.getName());
             }
+            
+            // Retrieve all products for the given restaurant
+            model.addAttribute("products", productService.findByRestaurantId(restaurant.getId()));
 
+            restaurant = restaurantService.findById(restaurant.getId());
+             
+            model.addAttribute("products", productService.findByRestaurantId(restaurant.getId()));
+            model.addAttribute("restaurantId", restaurant.getId());
+            model.addAttribute("restaurantName", restaurant.getName());
+            model.addAttribute("headerTemplate", "layouts/common-user");
+            
             // Redirect back to the restaurant's menu
-            return "redirect:/products/" + product.getRestaurantId();
+            return "restaurantmenuadmin";
         }
         catch (Exception e)
         {
@@ -157,38 +171,55 @@ public class ProductController
         }
     }
 
-    // -------------------------------------
-    // DELETING PRODUCTS
-    // -------------------------------------
+ // -------------------------------------
+ // DELETING PRODUCTS
+ // -------------------------------------
 
-    /**
-     * Handles product deletion.
-     * 
-     * @param product The ProductModel containing the product to delete.
-     * @return Redirects back to the restaurant's menu after deletion.
-     */
-    @PostMapping("/products/delete")
-    public String deleteProduct(@ModelAttribute("productModel") ProductModel product)
-    {
-        try
-        {
-            boolean success = productService.delete(product);
+ /**
+  * Handles product deletion.
+  * 
+  * @param id The ID of the product to delete.
+  * @return Redirects back to the restaurant's menu after deletion.
+  */
+ @PostMapping("/product/delete/{id}")
+ public String deleteProduct(@PathVariable("id") int id, Model model)
+ {
+     try
+     {
+         // Retrieve the product to access its restaurant ID
+         ProductModel product = productService.findById(id);
+         restaurant = restaurantService.findById(product.getRestaurantId());
 
-            if (success)
-            {
-                System.out.println("Product deleted successfully: ID " + product.getId());
-            }
-            else
-            {
-                System.err.println("Failed to delete product: ID " + product.getId());
-            }
+         // Perform deletion
+         boolean success = productService.delete(product);
 
-            return "redirect:/products/" + product.getRestaurantId();
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return "error";
-        }
-    }
+         if (success)
+         {
+             System.out.println("Product deleted successfully: ID " + id);
+         }
+         else
+         {
+             System.err.println("Failed to delete product: ID " + id);
+         }
+
+         // Retrieve all products for the given restaurant
+         model.addAttribute("products", productService.findByRestaurantId(restaurant.getId()));
+
+         restaurant = restaurantService.findById(restaurant.getId());
+          
+         model.addAttribute("products", productService.findByRestaurantId(restaurant.getId()));
+         model.addAttribute("restaurantId", restaurant.getId());
+         model.addAttribute("restaurantName", restaurant.getName());
+         model.addAttribute("headerTemplate", "layouts/common-user");
+         
+         // Redirect back to the restaurant's menu
+         return "restaurantmenuadmin";
+     }
+     catch (Exception e)
+     {
+         e.printStackTrace();
+         return "error";
+     }
+ }
+
 }

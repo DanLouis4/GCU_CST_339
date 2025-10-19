@@ -14,22 +14,26 @@
     <!-- RESTAURANT CARDS -->
     <div th:if="${restaurants != null}">
         <div th:each="restaurant : ${restaurants}" 
-             class="card shadow-sm mb-4 border-0" 
+             class="card shadow-sm mb-1 border" 
              style="border-radius: 12px; border-bottom: 1px dotted black;">
 
             <div class="row g-0 align-items-center">
 
                 <!-- RESTAURANT IMAGE -->
-                <div class="col-md-4 text-center p-3">
-                    <div class="bg-secondary d-flex align-items-center justify-content-center text-white rounded" 
-                         style="width: 100%; height: 180px;">
-                        <span>Image</span>
+				<div class="col-md-4 text-center p-0" style="height: 275px;">
+				    <div class="d-flex align-items-center justify-content-center text-white rounded" 
+				         style="width: 100%; height: 100%;">
+						 <!-- Image -->
+						 <img th:src="${restaurant.imageURL}" 
+						      class="w-100 h-100 object-fit-cover rounded-start" 
+						      alt="Restaurant Image" 
+						      style="object-fit: cover; border-top-left-radius: 12px; border-bottom-left-radius: 12px;">
                     </div>
                 </div>
 
                 <!-- RESTAURANT DETAILS -->
                 <div class="col-md-8">
-                    <div class="card-body">
+                    <div class="card-body p-3">
 
                         <h5 class="card-title fw-bold mb-1" 
                             th:text="${restaurant.name}">[Restaurant Name]</h5>

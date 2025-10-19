@@ -281,11 +281,15 @@ public class RestaurantController
      * @param restaurant The RestaurantModel containing the ID of the restaurant to delete.
      * @return Redirects back to the restaurant manager after deletion.
      */
-    @PostMapping("/restaurants/delete")
-    public String deleteRestaurant(@ModelAttribute("restaurantModel") RestaurantModel restaurant)
+    @PostMapping("/restaurants/delete/{id}")
+    public String deleteRestaurant(@PathVariable("id") int id, Model model)
     {
+    	
         try
         {
+	         // Retrieve restaurant from DB
+	        RestaurantModel restaurant = restaurantService.findById(id);
+	        
             boolean success = restaurantService.delete(restaurant);
 
             if (success)
@@ -296,8 +300,15 @@ public class RestaurantController
             {
                 System.err.println("Failed to delete restaurant: ID " + restaurant.getId());
             }
-
-            return "redirect:/restaurantmanager";
+            
+            // display restaurants by onwer
+             long ownerId = userSession.getId();         
+             model.addAttribute("restaurants", restaurantService.getRestaurantsByOwner(ownerId));
+            
+            
+	         model.addAttribute("restaurant", restaurant);
+	         model.addAttribute("headerTemplate", "layouts/common-user");
+            return "restaurantmanager";
         }
         catch (Exception e)
         {

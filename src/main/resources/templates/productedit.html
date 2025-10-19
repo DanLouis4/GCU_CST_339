@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/defaultTemplate}">
+<head>
+    <title>Speed-E-Eats - Edit Product</title>
+</head>
+<body>
+<section layout:fragment="content" class="container mt-5">
+
+    <h2>Edit Product - <span th:text="${productModel.name}">Product Name</span></h2>
+
+    <div th:if="${updateMessage}" class="alert alert-info mt-3" role="alert">
+        <span th:text="${updateMessage}">Product updated successfully!</span>
+    </div>
+
+    <form th:action="@{/products/update}" th:object="${productModel}" method="post" enctype="multipart/form-data">
+
+        <!-- Hidden fields -->
+        <input type="hidden" th:field="*{id}" />
+        <input type="hidden" th:field="*{restaurantId}" />
+
+        <div class="mb-3">
+            <label for="name" class="form-label">Product Name</label>
+            <input type="text" th:field="*{name}" class="form-control" id="name" placeholder="Enter product name" required />
+        </div>
+
+        <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <textarea th:field="*{description}" class="form-control" id="description" rows="3" placeholder="Enter description" required></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label for="price" class="form-label">Price</label>
+            <input type="number" th:field="*{price}" class="form-control" id="price" placeholder="Enter price" step="0.01" required />
+        </div>
+
+        <div class="mb-3">
+            <label for="imageFile" class="form-label">Upload Image</label>
+            <input type="file" id="imageFile" name="imageFile" class="form-control">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Update Product</button>
+        <a th:href="@{'/restaurants/menu/admin/' + ${productModel.restaurantId}}" class="btn btn-secondary ms-2">Cancel</a>
+    </form>
+
+</section>
+</body>
+</html>

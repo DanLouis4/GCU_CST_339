@@ -14,7 +14,7 @@
     <!-- RESTAURANT CARDS -->
     <div th:if="${restaurants != null}">
         <div th:each="restaurant : ${restaurants}" 
-             class="card shadow-sm mb-1 border" 
+             class="card shadow-sm mb-4 border" 
              style="border-radius: 12px; border-bottom: 1px dotted black;">
 
             <div class="row g-0 align-items-center">
@@ -54,7 +54,9 @@
                         <div class="d-flex gap-2">
 							<a th:href="@{'/restaurants/edit/' + ${restaurant.id}}" class="btn btn-success btn-sm px-3">Edit Restaurant</a>
 							<a th:href="@{'/restaurants/menu/admin/' + ${restaurant.id}}" class="btn btn-outline-success btn-sm px-3">Edit Menu</a>
-                            <a th:href="@{/restaurants/delete/{id}}" class="btn btn-danger btn-sm px-3">Delete</a>
+							<form th:action="@{'/restaurants/delete/' + ${restaurant.id}}" method="post" style="display:inline;">
+							    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+							</form>
                         </div>
                     </div>
                 </div>

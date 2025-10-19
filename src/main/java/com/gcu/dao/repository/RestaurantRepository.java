@@ -198,12 +198,12 @@ public class RestaurantRepository implements DataAccessInterface<RestaurantModel
      * @return true if deletion was successful; false otherwise.
      */
     @Override
-    public boolean delete(RestaurantModel id)
+    public boolean delete(RestaurantModel restaurant)
     {
         String sql = "DELETE FROM restaurants WHERE id = ?";
         try
         {
-            int rows = jdbcTemplate.update(sql, id);
+            int rows = jdbcTemplate.update(sql, restaurant.getId());
             return rows > 0;
         }
         catch (Exception e)

@@ -6,52 +6,65 @@
     <title>Speed-E-Eats - Restaurant Admin</title>
 </head>
 <body>
-    <section layout:fragment="content" class="container mt-5">
-		<h2 th:text="${restaurantName + ' Admin'}">[Restaurant Name] Admin</h2>
+<section layout:fragment="content" class="container mt-5">
 
-        <!-- Success Notifications -->
-        <div th:if="${successMessage}" class="alert alert-success mt-3" role="alert">
-            <span th:text="${successMessage}">Product was added successfully!</span>
-        </div>
+    <!-- Page Header -->
+    <h2 th:text="${restaurantName + ' Admin'}">[Restaurant Name] Admin</h2>
 
-        <div th:if="${updateMessage}" class="alert alert-info mt-3" role="alert">
-            <span th:text="${updateMessage}">Product was updated successfully!</span>
-        </div>
+    <!-- Success Notifications -->
+    <div th:if="${successMessage}" class="alert alert-success mt-3" role="alert">
+        <span th:text="${successMessage}">Product was added successfully!</span>
+    </div>
 
-        <div th:if="${deleteMessage}" class="alert alert-danger mt-3" role="alert">
-            <span th:text="${deleteMessage}">Product was deleted successfully!</span>
-        </div>
+    <div th:if="${updateMessage}" class="alert alert-info mt-3" role="alert">
+        <span th:text="${updateMessage}">Product was updated successfully!</span>
+    </div>
 
-        <!-- Product Table Placeholder -->
-        <table class="table table-striped mt-4">
-            <thead>
-                <tr>
-                    <th>Product Name</th>
-                    <th>Description</th>
-                    <th>Price</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-			<tbody>
-				<tr th:each="product : ${products}">
-			    	<td th:text="${product.name}">Sample Product</td>
-			    	<td style="width: 66%;" th:text="${product.description}">Sample description...</td>
-			    	<td>$<span th:text="${product.price}">0.00</span></td>
-                    <td>
-                        <a href="#" class="btn btn-sm btn-warning">Edit</a>
-						<form th:action="@{'/product/delete/' + ${product.id}}" method="post" style="display:inline;">
-						    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-						</form>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+    <div th:if="${deleteMessage}" class="alert alert-danger mt-3" role="alert">
+        <span th:text="${deleteMessage}">Product was deleted successfully!</span>
+    </div>
 
-		<!-- Admin Actions -->
-		<div class="mt-4">
-		    <a th:href="@{'/products/new/' + ${restaurantId}}" class="btn btn-success me-2">+ Add New Product</a>
-		    <a th:href="@{'/restaurantmenu/' + ${restaurantId}}" class="btn btn-outline-primary">View Restaurant Menu</a>
-		</div>
-    </section>
-	</body>
+    <!-- Product Table -->
+    <table class="table table-striped mt-4">
+        <thead>
+            <tr>
+                <th>Product Name</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>Image</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="product : ${products}">
+                <td th:text="${product.name}" style="width: fit-content;">Sample Product</td>
+                <td th:text="${product.description}" style="width:50%;">Sample description...</td>
+                <td>$<span th:text="${product.price}">0.00</span></td>
+                <td>
+                    <img th:if="${product.imageURL}" th:src="@{${product.imageURL}}" alt="Product Image" style="height: 60px;" />
+                    <span th:if="${product.imageURL == null}">No Image Available</span>
+                </td>
+
+                <td>
+                    <!-- Edit Button -->
+                    <a th:href="@{/products/edit/{id}(id=${product.id})}" class="btn btn-sm btn-warning">Edit</a>
+
+                    <!-- Delete Button as POST form -->
+                    <form th:action="@{/product/delete/{id}(id=${product.id})}" method="post" style="display:inline;">
+                        <input type="hidden" th:name="restaurantId" th:value="${restaurantId}" />
+                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Admin Actions -->
+    <div class="mt-4">
+        <a th:href="@{'/products/new/' + ${restaurantId}}" class="btn btn-success me-2">+ Add New Product</a>
+        <a th:href="@{'/restaurants/product/menu/' + ${restaurantId}}" class="btn btn-outline-primary">View Restaurant Menu</a>
+    </div>
+
+</section>
+</body>
 </html>

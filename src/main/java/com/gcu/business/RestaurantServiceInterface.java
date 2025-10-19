@@ -57,8 +57,8 @@ public interface RestaurantServiceInterface
     /**
      * Deletes a restaurant record by ID.
      * 
-     * @param id The restaurant ID to delete.
+     * @param restaurant The restaurant ID to delete.
      * @return true if successful; false otherwise.
      */
-    boolean delete(RestaurantModel id);
+    boolean delete(RestaurantModel restaurant);
 }

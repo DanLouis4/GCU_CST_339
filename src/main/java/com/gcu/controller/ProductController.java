@@ -1,12 +1,23 @@
 package com.gcu.controller;
 
+
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.gcu.business.ProductServiceInterface;
 import com.gcu.business.RestaurantServiceInterface;
@@ -170,56 +181,114 @@ public class ProductController
             return "error";
         }
     }
+    
+    // ---------------------------
+    // EDIT PRODUCT
+    // ---------------------------
+    @GetMapping("/products/edit/{id}")
+    public String showEditProductForm(@PathVariable int id, Model model) {
+        ProductModel product = productService.findById(id);
+        if (product == null) {
+            return "redirect:/error";
+        }
+        model.addAttribute("productModel", product);
+        model.addAttribute("headerTemplate", "layouts/common-user");
+        return "productedit"; // must match the template file name
+    }
 
- // -------------------------------------
- // DELETING PRODUCTS
- // -------------------------------------
 
- /**
-  * Handles product deletion.
-  * 
-  * @param id The ID of the product to delete.
-  * @return Redirects back to the restaurant's menu after deletion.
-  */
- @PostMapping("/product/delete/{id}")
- public String deleteProduct(@PathVariable("id") int id, Model model)
- {
-     try
-     {
-         // Retrieve the product to access its restaurant ID
-         ProductModel product = productService.findById(id);
-         restaurant = restaurantService.findById(product.getRestaurantId());
+    @PostMapping("/products/update")
+    public String updateProduct(@ModelAttribute("productModel") ProductModel product,
+                                @RequestParam(value = "imageFile", required = false) MultipartFile imageFile,
+                                RedirectAttributes redirectAttributes) {
+        try {
+            // Fetch existing product from DB
+            ProductModel existingProduct = productService.findById(product.getId());
+            if (existingProduct == null) {
+                redirectAttributes.addFlashAttribute("errorMessage", "Product not found!");
+                return "redirect:/error";
+            }
 
-         // Perform deletion
-         boolean success = productService.delete(product);
+            // Only update image if a new file is uploaded
+            if (imageFile != null && !imageFile.isEmpty()) {
+                String fileName = imageFile.getOriginalFilename();
+                Path uploadPath = Paths.get("src/main/resources/static/images"); // your existing images folder
 
-         if (success)
-         {
-             System.out.println("Product deleted successfully: ID " + id);
-         }
-         else
-         {
-             System.err.println("Failed to delete product: ID " + id);
-         }
+                if (!Files.exists(uploadPath)) {
+                    Files.createDirectories(uploadPath);
+                }
 
-         // Retrieve all products for the given restaurant
-         model.addAttribute("products", productService.findByRestaurantId(restaurant.getId()));
+                Path filePath = uploadPath.resolve(fileName);
+                Files.copy(imageFile.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 
-         restaurant = restaurantService.findById(restaurant.getId());
-          
-         model.addAttribute("products", productService.findByRestaurantId(restaurant.getId()));
-         model.addAttribute("restaurantId", restaurant.getId());
-         model.addAttribute("restaurantName", restaurant.getName());
-         model.addAttribute("headerTemplate", "layouts/common-user");
-         
-         // Redirect back to the restaurant's menu
-         return "restaurantmenuadmin";
-     }
-     catch (Exception e)
-     {
-         e.printStackTrace();
-         return "error";
-     }
- }
+                product.setImageURL("/images/" + fileName); // Update with new image
+            } else {
+                product.setImageURL(existingProduct.getImageURL()); // Keep old image
+            }
+
+            // Update product in DB
+            productService.update(product);
+            redirectAttributes.addFlashAttribute("updateMessage", "Product updated successfully!");
+
+            return "redirect:/restaurants/menu/admin/" + product.getRestaurantId();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("errorMessage", "Error updating product!");
+            return "redirect:/error";
+        }
+    }
+    
+
+	 // -------------------------------------
+	 // DELETING PRODUCTS
+	 // -------------------------------------
+	
+	 /**
+	  * Handles product deletion.
+	  * 
+	  * @param id The ID of the product to delete.
+	  * @return Redirects back to the restaurant's menu after deletion.
+	  */
+	 @PostMapping("/product/delete/{id}")
+	 public String deleteProduct(@PathVariable("id") int id, Model model)
+	 {
+	     try
+	     {
+	         // Retrieve the product to access its restaurant ID
+	         ProductModel product = productService.findById(id);
+	         restaurant = restaurantService.findById(product.getRestaurantId());
+	
+	         // Perform deletion
+	         boolean success = productService.delete(product);
+	
+	         if (success)
+	         {
+	             System.out.println("Product deleted successfully: ID " + id);
+	         }
+	         else
+	         {
+	             System.err.println("Failed to delete product: ID " + id);
+	         }
+	
+	         // Retrieve all products for the given restaurant
+	         model.addAttribute("products", productService.findByRestaurantId(restaurant.getId()));
+	
+	         restaurant = restaurantService.findById(restaurant.getId());
+	          
+	         model.addAttribute("products", productService.findByRestaurantId(restaurant.getId()));
+	         model.addAttribute("restaurantId", restaurant.getId());
+	         model.addAttribute("restaurantName", restaurant.getName());
+	         model.addAttribute("headerTemplate", "layouts/common-user");
+	         
+	         // Redirect back to the restaurant's menu
+	         return "restaurantmenuadmin";
+	     }
+	     catch (Exception e)
+	     {
+	         e.printStackTrace();
+	         return "error";
+	     }
+	 }
 
 }

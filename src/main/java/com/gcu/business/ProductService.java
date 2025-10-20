@@ -66,7 +66,7 @@ public class ProductService implements ProductServiceInterface
     {
         try
         {
-            return productRepository.findById(id);
+            return productRepository.findByID(id);
         }
         catch (Exception e)
         {

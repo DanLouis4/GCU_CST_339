@@ -64,7 +64,7 @@ public class RestaurantService implements RestaurantServiceInterface
     {
         try
         {
-            return restaurantRepository.findById(id);
+            return restaurantRepository.findByID(id);
         }
         catch (Exception e)
         {

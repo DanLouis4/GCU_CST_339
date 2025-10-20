@@ -7,7 +7,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Repository;
 
-import com.gcu.data.DataAccessInterface;
+import com.gcu.dao.DataAccessInterface;
 import com.gcu.model.ProductModel;
 
 /**
@@ -117,7 +117,7 @@ public class ProductRepository implements DataAccessInterface<ProductModel>
      * @return ProductModel containing the product details.
      */
     @Override
-    public ProductModel findById(int id)
+    public ProductModel findByID(int id)
     {
         ProductModel product = null;
 

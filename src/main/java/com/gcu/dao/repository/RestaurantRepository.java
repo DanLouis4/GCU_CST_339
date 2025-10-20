@@ -1,6 +1,6 @@
 package com.gcu.dao.repository;
 
-import com.gcu.data.DataAccessInterface;
+import com.gcu.dao.DataAccessInterface;
 import com.gcu.model.RestaurantModel;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
@@ -84,9 +84,8 @@ public class RestaurantRepository implements DataAccessInterface<RestaurantModel
      * @param id The restaurant's unique identifier.
      * @return RestaurantModel object if found; otherwise null.
      */
-    @Override
-    public RestaurantModel findById(int id)
-    {
+	@Override
+	public RestaurantModel findByID(int id) {
         String sql = "SELECT * FROM restaurants WHERE id = ?";
         try
         {
@@ -103,10 +102,10 @@ public class RestaurantRepository implements DataAccessInterface<RestaurantModel
         catch (Exception e)
         {
             e.printStackTrace();
-            return null;
         }
-    }
-
+		return null;
+	}
+	
     /**
      * Retrieves all restaurants owned by a specific user.
      * 

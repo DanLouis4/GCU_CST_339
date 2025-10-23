@@ -13,7 +13,9 @@
 package com.gcu.business;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.security.core.Authentication;
 
 @Service
 public class UserProfileService implements UserProfileServiceInterface {
@@ -26,7 +28,12 @@ public class UserProfileService implements UserProfileServiceInterface {
      */
     @Override
     public String getCurrentUsername() {
-        return userSession.getUsername();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.isAuthenticated() && !"anonymousUser".equals(auth.getName()))
+        {
+            return auth.getName();
+        }
+        return null;
     }
 
     /**

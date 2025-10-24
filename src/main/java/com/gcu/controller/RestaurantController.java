@@ -71,7 +71,7 @@ public class RestaurantController
 
             // Add user info for personalization
             model.addAttribute("username", userSession.getUsername());
-
+            model.addAttribute("firstName", userSession.getFirstName());
             model.addAttribute("headerTemplate", "layouts/common-user");
             return "restaurantmanager";
         }
@@ -109,7 +109,11 @@ public class RestaurantController
 	         // Retrieve products associated with the restaurant
 	         model.addAttribute("restaurant", restaurant);
 	         model.addAttribute("products", productService.findByRestaurantId(id));
-	
+
+            // Add user info for personalization
+            model.addAttribute("username", userSession.getUsername());
+            model.addAttribute("firstName", userSession.getFirstName());
+	         
 	         // Sets the correct navigation bar and layout
 	         model.addAttribute("headerTemplate", "layouts/common-user");
 	
@@ -147,7 +151,15 @@ public class RestaurantController
 
             // Create blank model for form binding
             model.addAttribute("restaurantModel", new RestaurantModel());
+
+            // Add user info for personalization
+            model.addAttribute("username", userSession.getUsername());
+            model.addAttribute("firstName", userSession.getFirstName());            
+            
             model.addAttribute("headerTemplate", "layouts/common-user");
+            
+            System.out.println("User or owner id is " + userSession.getId());
+            
             return "restaurantnew";
         }
         catch (Exception e)
@@ -225,8 +237,14 @@ public class RestaurantController
 	             return "redirect:/restaurantmanager";
 	         }
 	
-	         // Bind restaurant data to the model for pre-filling form fields
-	         model.addAttribute("restaurant", restaurant);
+            // Bind restaurant data to the model for pre-filling form fields
+            model.addAttribute("restaurant", restaurant);
+
+            // Add user info for personalization
+            model.addAttribute("username", userSession.getUsername());
+            model.addAttribute("firstName", userSession.getFirstName());
+		         
+	         // Sets the correct navigation bar and layout
 	         model.addAttribute("headerTemplate", "layouts/common-user");
 	
 	         return "restaurantedit"; // View: restaurantedit.html
@@ -299,16 +317,24 @@ public class RestaurantController
             else
             {
                 System.err.println("Failed to delete restaurant: ID " + restaurant.getId());
-            }
+            }         
             
-            // display restaurants by onwer
+             // display restaurants by owner
              long ownerId = userSession.getId();         
              model.addAttribute("restaurants", restaurantService.getRestaurantsByOwner(ownerId));
             
             
 	         model.addAttribute("restaurant", restaurant);
+
+	         // Add user info for personalization
+	         model.addAttribute("username", userSession.getUsername());
+	         model.addAttribute("firstName", userSession.getFirstName());
+		       
+		     
+	         // Sets the correct navigation bar and layout		     
 	         model.addAttribute("headerTemplate", "layouts/common-user");
-            return "restaurantmanager";
+            
+	         return "restaurantmanager";
         }
         catch (Exception e)
         {

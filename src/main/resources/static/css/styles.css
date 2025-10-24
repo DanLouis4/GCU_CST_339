@@ -196,6 +196,83 @@ main {
   border-radius: 0;
 }
 
+/* ================================
+   Custom Nav Bar items
+   ================================ */
+.dropdown-menu li {
+    text-align: right;                /* right-justify */
+    font-size: 0.9rem;           /* slightly smaller font */
+    z-index: 2000;               /* ensures it hovers above content */
+}
+.dropdown-item:hover {
+    background-color: #f8f9fa;
+}
+
+/* ================================
+   MENU PAGE STYLES
+   ================================ */
+
+/* Hero Section */
+.hero {
+	color: #f2f2f2;
+    position: relative;
+    height: 350px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-color: rgb(0, 0, 0, .5); /* 50% white overlay */
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    color: #212529;
+    padding-top: 100px;
+    text-align: left;
+}
+
+.hero-content h1 {
+    font-weight: 700;
+}
+
+.hero-content p {
+    margin-bottom: 0.5rem;
+}
+
+/* Menu Cards Grid */
+.menu-card img {
+    height: 200px;
+    object-fit: cover;
+}
+
+.menu-card .card-body {
+	display: inline-block;
+    min-height: 200px;
+}
+
+.menu-card .price {
+    font-weight: bold;
+    color: #dc3545;
+    text-align: right;
+}
+
+@media (max-width: 992px) {
+    .menu-card img { height: 180px; }
+}
+
+@media (max-width: 768px) {
+    .menu-card img { height: 160px; }
+}
+
+@media (max-width: 576px) {
+    .menu-card img { height: 140px; }
+}
 
 /* ================================
    Footer

@@ -12,13 +12,12 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.stereotype.Component;
 
 
-
 @Configuration
 public class SecurityConfig 
 {
     @Bean
     public DatabaseUserDetailsService userDetailsService() {
-        return new  DatabaseUserDetailsService();
+        return new DatabaseUserDetailsService();
     }
 
     @Bean
@@ -57,7 +56,8 @@ public class SecurityConfig
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/signin", "/signup", "/css/**", "/js/**").permitAll()
+                .requestMatchers("/", "/signup", "/signin", "/css/**", "/js/**", "/images/**", "/videos/**", "/fonts/**")
+                .permitAll()
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form
@@ -69,7 +69,7 @@ public class SecurityConfig
             )
             .logout(logout -> logout
                 .logoutUrl("/logout")
-                .logoutSuccessUrl("/signin?logout=true")
+                .logoutSuccessUrl("/")
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID")
                 .permitAll()

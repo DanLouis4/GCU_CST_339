@@ -41,7 +41,7 @@
                 <td th:text="${product.description}" style="width:50%;">Sample description...</td>
                 <td>$<span th:text="${product.price}">0.00</span></td>
                 <td>
-                    <img th:if="${product.imageURL}" th:src="@{${product.imageURL}}" alt="Product Image" style="height: 60px;" />
+                    <img th:src="${product.imageURL}" alt="Product Image" style="height: 60px;" />
                     <span th:if="${product.imageURL == null}">No Image Available</span>
                 </td>
 

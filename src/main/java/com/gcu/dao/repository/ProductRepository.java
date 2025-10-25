@@ -194,8 +194,8 @@ public class ProductRepository implements DataAccessInterface<ProductModel>
                     product.getDescription(),
                     product.getPrice(),
                     product.getRestaurantId(),
-                    product.getId(),
-                    product.getImageURL());
+                    product.getImageURL(),
+                    product.getId());
 
             return rows > 0;
         }

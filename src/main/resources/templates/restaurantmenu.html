@@ -10,7 +10,7 @@
 <section layout:fragment="content">
 
     <!-- HERO SECTION -->
-    <div class="container-fluid p-0">
+    <div class="container-fluid p-0 m-0">
         <div class="hero"
              th:style="'background-image: url(' + ${restaurant.imageURL} + ');'">
             <div class="hero-content text-white">
@@ -24,7 +24,15 @@
             </div>
         </div>
     </div>
-
+	<div class="container">
+		<div>
+			<p class="mt-0 p-0 text-center">
+				<span th:text="${restaurant.address}">Address</span>&nbsp;★&nbsp;
+				<span th:text="${restaurant.phone}">Phone</span>
+			</p>	
+		</div>
+		
+	</div>
     <!-- MENU GRID SECTION -->
     <div class="container py-5">
         <h2 class="fw-bold text-center mb-4">Menu</h2>

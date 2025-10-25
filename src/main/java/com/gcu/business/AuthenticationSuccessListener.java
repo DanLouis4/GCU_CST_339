@@ -21,13 +21,15 @@ public class AuthenticationSuccessListener implements ApplicationListener<Authen
     public void onApplicationEvent(AuthenticationSuccessEvent event) {
         String username = event.getAuthentication().getName();
         UserModel user = userRepository.findByUsername(username);
-
+        
         if (user != null) {
+            userSession.setId(user.getId());
             userSession.setUsername(user.getUsername());
             userSession.setFirstName(user.getFirstName());
-            userSession.setLastName(user.getLastName());
-            userSession.setEmail(user.getEmail());
             userSession.setRole(user.getRole());
+            System.out.println("[LOGIN SUCCESS] User session updated: " + user.getUsername() + " (ID: " + user.getId() + ")");
+        } else {
+            System.out.println("[LOGIN SUCCESS] User not found in database for: " + username);
         }
     }
 }

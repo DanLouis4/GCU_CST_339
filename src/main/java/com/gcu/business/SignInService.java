@@ -46,6 +46,7 @@ public class SignInService implements SignInServiceInterface {
             if (user != null && password.equals(user.getPassword()))
             {
                 // Populate session with user info
+            	userSession.setId(user.getId());
                 userSession.setUsername(user.getUsername());
                 userSession.setFirstName(user.getFirstName());
                 userSession.setLastName(user.getLastName());

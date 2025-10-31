@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.gcu</groupId>
-	<artifactId>CLC-milestone6</artifactId>
+	<artifactId>CLC-milestone7</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>CLC-milestone5</name>
-	<description>CLC Milestone 6</description>
+	<name>CLC-milestone7</name>
+	<description>CLC Milestone 7</description>
 	<url/>
 	<licenses>
 		<license/>

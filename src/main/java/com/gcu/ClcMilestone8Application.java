@@ -7,9 +7,9 @@ import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @ComponentScan({ "com.gcu" })
-public class ClcMilestone7Application {
+public class ClcMilestone8Application {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ClcMilestone7Application.class, args);
+		SpringApplication.run(ClcMilestone8Application.class, args);
 	}
 }

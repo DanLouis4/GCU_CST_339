@@ -76,6 +76,8 @@ public class MainController
             // Example:
             // List<OrderModel> recentOrders = orderService.getRecentOrdersByUser(loggedInUser.getId());
             // model.addAttribute("recentOrders", recentOrders);
+        	
+        	System.out.println("user role is = " + userSession.getRole());
 
             // Render the home page view
             return "home";

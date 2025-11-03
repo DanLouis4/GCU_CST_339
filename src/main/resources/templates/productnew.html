@@ -36,6 +36,24 @@
                 <div class="text-danger" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></div>
             </div>
 			
+			<!-- Image URL with Preview -->
+			<div class="mb-3 d-flex align-items-start">
+			    <div class="flex-grow-1 me-3">
+			        <label for="imageURL" class="form-label fw-bold">Image URL</label>
+			        <input type="text" id="imageURL" th:field="*{imageURL}" class="form-control"
+			               placeholder="http://localhost:8081/images/logo.png" oninput="showImagePreview()">
+			        <div class="text-danger" th:if="${#fields.hasErrors('imageURL')}" th:errors="*{imageURL}"></div>
+			    </div>
+
+			    <div id="previewContainer" style="width: 200px;">
+			        <img id="imagePreview" 
+			             src="/images/logo.png" 
+			             alt="Preview" 
+			             class="img-fluid border rounded" 
+			             style="max-height:150px; object-fit:contain;">
+			    </div>
+			</div>
+			
 			<!-- Hidden Restaurant ID -->
 			<input type="hidden" name="restaurantId" th:value="${restaurant.id}" />
 

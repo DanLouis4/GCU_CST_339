@@ -3,31 +3,56 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/defaultTemplate}">
 <head>
-    <title>Speed-E-Eats - Restaurant Menu</title>
+    <title th:text="'Speed-E-Eats | ' + ${restaurant.name} + ' Menu'">Restaurant Menu</title>
 </head>
-<body>
-    <section layout:fragment="content" class="container mt-5">
-        <h2 th:text="${restaurant.name} + ' Menu'">Sample Restaurant Menu</h2>
-		<p th:text="${restaurant.description}">Description...</p>
 
-        <!-- Menu Table -->
-        <table class="table table-hover mt-4">
-            <thead>
-                <tr>
-                    <th>Product</th>
-                    <th>Description</th>
-                    <th>Price</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Dynamically list products -->
-                <tr th:each="product : ${products}">
-                    <td th:text="${product.name}">Sample Product</td>
-                    <td th:text="${product.description}">Sample description...</td>
-                    <td>$<span th:text="${product.price}">0.00</span></td>
-                </tr>
-            </tbody>
-        </table>
-    </section>
+<body>
+<section layout:fragment="content">
+
+    <!-- HERO SECTION -->
+    <div class="container-fluid p-0 m-0">
+        <div class="hero"
+             th:style="'background-image: url(' + ${restaurant.imageURL} + ');'">
+            <div class="hero-content text-white">
+                <h1 class="display-5 fw-bold mx-auto px-4 py-2 w-75 w-md-50" th:text="${restaurant.name}">Restaurant Name</h1>
+                <p class="mx-auto px-4 py-2 w-75 w-md-50">★ 4.5 (200+) • 25–30 min</p>
+                <div class="mx-auto px-4 py-2 w-75 w-md-50">
+                    <p class="mb-0 small" th:text="${restaurant.description}">
+                        Delicious handcrafted dishes made fresh daily.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+	<div class="container">
+		<div>
+			<p class="mt-0 p-0 text-center">
+				<span th:text="${restaurant.address}">Address</span>&nbsp;★&nbsp;
+				<span th:text="${restaurant.phone}">Phone</span>
+			</p>	
+		</div>
+		
+	</div>
+    <!-- MENU GRID SECTION -->
+    <div class="container py-5">
+        <h2 class="fw-bold text-center mb-4">Menu</h2>
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+            <div class="col" th:each="product : ${products}">
+                <div class="card menu-card h-100 shadow-sm">
+                    <img th:src="${product.imageURL}" class="card-img-top" alt="Product Image">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title text-capitalize" th:text="${product.name}">Product Name</h5>
+                        <p class="card-text text-muted small flex-grow-1"
+                           th:text="${product.description}">
+                           Description of the product goes here.
+                        </p>
+                        <p class="price mt-2" th:text="'$' + ${product.price}">PRICE</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
 </body>
 </html>

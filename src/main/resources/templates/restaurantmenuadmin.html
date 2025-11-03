@@ -41,7 +41,7 @@
                 <td th:text="${product.description}" style="width:50%;">Sample description...</td>
                 <td>$<span th:text="${product.price}">0.00</span></td>
                 <td>
-                    <img th:if="${product.imageURL}" th:src="@{${product.imageURL}}" alt="Product Image" style="height: 60px;" />
+                    <img th:src="${product.imageURL}" alt="Product Image" style="height: 60px;" />
                     <span th:if="${product.imageURL == null}">No Image Available</span>
                 </td>
 
@@ -62,7 +62,7 @@
     <!-- Admin Actions -->
     <div class="mt-4">
         <a th:href="@{'/products/new/' + ${restaurantId}}" class="btn btn-success me-2">+ Add New Product</a>
-        <a th:href="@{'/restaurants/product/menu/' + ${restaurantId}}" class="btn btn-outline-primary">View Restaurant Menu</a>
+        <a th:href="@{'/restaurantmenu/' + ${restaurantId}}" class="btn btn-outline-primary">View Restaurant Menu</a>
     </div>
 
 </section>

@@ -195,36 +195,19 @@ public class ProductController
 
 
     @PostMapping("/products/update")
-    public String updateProduct(@ModelAttribute("productModel") ProductModel product,
-                                @RequestParam(value = "imageFile", required = false) MultipartFile imageFile,
-                                RedirectAttributes redirectAttributes) {
+    public String updateProduct(@ModelAttribute("productModel") ProductModel product, RedirectAttributes redirectAttributes) {
         try {
             // Fetch existing product from DB
             ProductModel existingProduct = productService.findById(product.getId());
+            
             if (existingProduct == null) {
                 redirectAttributes.addFlashAttribute("errorMessage", "Product not found!");
                 return "redirect:/error";
             }
 
-            // Only update image if a new file is uploaded
-            if (imageFile != null && !imageFile.isEmpty()) {
-                String fileName = imageFile.getOriginalFilename();
-                Path uploadPath = Paths.get("src/main/resources/static/images"); // your existing images folder
-
-                if (!Files.exists(uploadPath)) {
-                    Files.createDirectories(uploadPath);
-                }
-
-                Path filePath = uploadPath.resolve(fileName);
-                Files.copy(imageFile.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-
-                product.setImageURL("/images/" + fileName); // Update with new image
-            } else {
-                product.setImageURL(existingProduct.getImageURL()); // Keep old image
-            }
-
             // Update product in DB
             productService.update(product);
+            
             redirectAttributes.addFlashAttribute("updateMessage", "Product updated successfully!");
 
             return "redirect:/restaurants/menu/admin/" + product.getRestaurantId();

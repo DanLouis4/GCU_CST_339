@@ -14,8 +14,9 @@ package com.gcu.business;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.gcu.model.UserModel;
+
 import com.gcu.dao.repository.UserRepository;
+import com.gcu.model.UserModel;
 
 @Service
 public class SignInService implements SignInServiceInterface {
@@ -33,7 +34,8 @@ public class SignInService implements SignInServiceInterface {
      * @param password The entered password.
      * @return true if the credentials match; otherwise false.
      */
-    @Override
+
+  @Override
     public boolean authenticate(String username, String password) {
         try
         {
@@ -44,6 +46,7 @@ public class SignInService implements SignInServiceInterface {
             if (user != null && password.equals(user.getPassword()))
             {
                 // Populate session with user info
+            	userSession.setId(user.getId());
                 userSession.setUsername(user.getUsername());
                 userSession.setFirstName(user.getFirstName());
                 userSession.setLastName(user.getLastName());

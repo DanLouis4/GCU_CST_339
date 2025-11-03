@@ -62,21 +62,22 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
         http
-            // Disable CSRF for simplicity during testing
+            // Disable CSRF for API testing convenience
             .csrf(csrf -> csrf.disable())
 
-            // Authorization configuration
+            // --- Authorization Rules ---
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/", "/signup", "/signin", "/css/**", "/js/**", "/images/**", "/videos/**", "/fonts/**")
+
+                // Public pages
+                .requestMatchers("/", "/signup", "/signin", "/css/**", "/js/**", "/images/**", "/videos/**")
                 .permitAll()
-                // Require login for API routes
+
+                // Require login for API & secure pages
                 .requestMatchers("/api/**").authenticated()
                 .anyRequest().authenticated()
             )
-
-            //  Add Basic Authentication for REST API
-            .httpBasic(withDefaults())
 
             // Add Form Login for web users
             .formLogin(form -> form
@@ -94,7 +95,10 @@ public class SecurityConfig {
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID")
                 .permitAll()
-            );
+            )
+        
+            //  Add Basic Authentication for REST API
+            .httpBasic(withDefaults());
 
         return http.build();
     }

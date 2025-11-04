@@ -6,67 +6,86 @@
     <title>Speed-E-Eats - Add New Restaurant</title>
 </head>
 <body>
-    <section layout:fragment="content" class="container mt-5">
-        <h2 class="text-center text-primary mb-4">Add a New Restaurant</h2>
+	<section layout:fragment="content">
 
-        <form th:action="@{/restaurants/save}" th:object="${restaurantModel}" method="post" class="mt-4 col-md-8 mx-auto">
+		<!-- HERO SECTION -->
+		<div class="container-fluid p-0 m-0 position-relative">
+		    <div class="hero position-relative" style="background-image: url('/images/logo.png'); background-size: cover; background-position: center; height: 350px;">
 
-            <!-- Restaurant Name -->
-            <div class="mb-3">
-                <label for="name" class="form-label fw-bold">Restaurant Name</label>
-                <input type="text" id="name" th:field="*{name}" class="form-control" placeholder="Enter restaurant name" required>
-                <div class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
-            </div>
+		        <!-- HERO CONTENT (BEHIND breadcrumb) -->
+		        <div class="hero-content text-white h-100 d-flex flex-column justify-content-center align-items-center position-relative" 
+		             style="background-color: rgba(0,0,0,0.45); z-index: 1;">
+		            <h1 id="restaurantTitle" class="display-5 fw-bold mx-auto px-4 py-2 w-75 w-md-50">Add a New Restaurant</h1>
+		            <span class="mx-auto px-4 py-2 w-75 w-md-50">★ 0.0 (0) • 30 min</span>
+		            <p id="restaurantDescription" class="mx-auto px-4 w-75 w-md-50">
+		                Complete the details below to register your restaurant on Speed-E-Eats.
+		            </p>
+		        </div>
 
-            <!-- Address -->
-            <div class="mb-3">
-                <label for="address" class="form-label fw-bold">Address</label>
-                <input type="text" id="address" th:field="*{address}" class="form-control" placeholder="Enter address" required>
-                <div class="text-danger" th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></div>
-            </div>
+		        <!-- BREADCRUMB NAVIGATION (IN FRONT of hero) -->
+		        <div class="position-absolute top-0 start-50 translate-middle-x w-100 text-center" style="z-index: 3;">
+		            <p class="text-white fs-6 mb-0 py-2" style="background-color: rgba(0,0,0,0.55); border-radius: 0;">
+		                / <a th:href="@{/home}" class="text-white">home</a>
+		                / <a th:href="@{/restaurantmanager}" class="text-white">restaurant manager</a>
+		                / <span>new</span>
+		            </p>
+		        </div>
+		    </div>
+		</div>
 
-            <!-- Phone -->
-            <div class="mb-3">
-                <label for="phone" class="form-label fw-bold">Phone Number</label>
-                <input type="text" id="phone" th:field="*{phone}" class="form-control" placeholder="555-123-4567" required>
-                <div class="text-danger" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></div>
-            </div>
+		<!-- RESTAURANT DETAILS (under hero) -->
+		<p id="restaurantAddress" class="text-center my-3 text-muted">
+		    123 Main St, City, State ZIP ★ (555) 123-4567
+		</p>
+		
+	    <!-- FORM SECTION -->
+	    <div class="container py-5">
+	        <form th:action="@{/restaurants/save}" th:object="${restaurantModel}" method="post" class="col-md-8 mx-auto">
+	            
+	            <!-- Restaurant Name -->
+	            <div class="mb-3">
+	                <label for="name" class="form-label fw-bold">Restaurant Name</label>
+	                <input type="text" id="name" th:field="*{name}" class="form-control" placeholder="Enter restaurant name" required>
+	            </div>
 
-            <!-- Description -->
-            <div class="mb-3">
-                <label for="description" class="form-label fw-bold">Description</label>
-                <textarea id="description" th:field="*{description}" class="form-control" rows="3"
-                          placeholder="Enter restaurant description"></textarea>
-                <div class="text-danger" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></div>
-            </div>
+	            <!-- Address -->
+	            <div class="mb-3">
+	                <label for="address" class="form-label fw-bold">Address</label>
+	                <input type="text" id="address" th:field="*{address}" class="form-control" placeholder="123 Main St, City, State ZIP" required>
+	            </div>
 
-			<!-- Image URL with Preview -->
-			<div class="mb-3 d-flex align-items-start">
-			    <div class="flex-grow-1 me-3">
-			        <label for="imageURL" class="form-label fw-bold">Image URL</label>
-			        <input type="text" id="imageURL" th:field="*{imageURL}" class="form-control"
-			               placeholder="http://localhost:8081/images/logo.png" oninput="showImagePreview()">
-			        <div class="text-danger" th:if="${#fields.hasErrors('imageURL')}" th:errors="*{imageURL}"></div>
-			    </div>
+	            <!-- Phone -->
+	            <div class="mb-3">
+	                <label for="phone" class="form-label fw-bold">Phone Number</label>
+	                <input type="text" id="phone" th:field="*{phone}" class="form-control" placeholder="(555) 123-4567" required>
+	            </div>
 
-			    <div id="previewContainer" style="width: 200px;">
-			        <img id="imagePreview" 
-			             src="/images/logo.png" 
-			             alt="Preview" 
-			             class="img-fluid border rounded" 
-			             style="max-height:150px; object-fit:contain;">
-			    </div>
-			</div>
+	            <!-- Description -->
+	            <div class="mb-3">
+	                <label for="description" class="form-label fw-bold">Description</label>
+	                <textarea id="description" th:field="*{description}" class="form-control" rows="3" placeholder="Describe your restaurant (e.g., cuisine, vibe, specialties)"></textarea>
+	            </div>
 
-            <!-- Hidden Owner ID (Set from logged-in user session) -->
-            <input type="hidden" id="ownerId" th:field="*{ownerId}" />
+	            <!-- Image URL -->
+	            <div class="mb-4 d-flex align-items-start">
+	                <div class="flex-grow-1 me-3">
+	                    <label for="imageURL" class="form-label fw-bold">Image URL</label>
+	                    <input type="text" id="imageURL" th:field="*{imageURL}" class="form-control"
+	                           placeholder="http://localhost:8081/images/restaurant-placeholder.jpg"
+	                           oninput="showImagePreview()">
+	                </div>
+	            </div>
 
-            <!-- Submit Button -->
-            <div class="text-center mt-4">
-                <button type="submit" class="btn btn-primary px-4">Save Restaurant</button>
-                <a th:href="@{/restaurantmanager}" class="btn btn-outline-secondary ms-2">Cancel</a>
-            </div>
-        </form>
-    </section>
+	            <!-- Hidden Owner ID -->
+	            <input type="hidden" id="ownerId" th:field="*{ownerId}" />
+
+	            <!-- Buttons -->
+	            <div class="text-center">
+	                <button type="submit" class="btn btn-primary px-4">Save Restaurant</button>
+	                <a th:href="@{/restaurants}" class="btn btn-outline-secondary ms-2">Cancel</a>
+	            </div>
+	        </form>
+	    </div>
+	</section>
 </body>
 </html>

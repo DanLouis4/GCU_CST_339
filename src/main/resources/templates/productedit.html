@@ -1,62 +1,96 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/defaultTemplate}">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/defaultTemplate}">
+
 <head>
-    <title>Speed-E-Eats - Edit Product</title>
+	<title>Speed-E-Eats - Edit Product</title>
 </head>
+
 <body>
-<section layout:fragment="content" class="container mt-5">
+	<section layout:fragment="content">
 
-    <h2>Edit Product - <span th:text="${productModel.name}">Product Name</span></h2>
+		<!-- HERO SECTION -->
+		<div class="container-fluid p-0 m-0">
+			<div class="hero" th:style="'background-image: url(' + ${restaurant.imageURL} + ');'">
 
-    <div th:if="${updateMessage}" class="alert alert-info mt-3" role="alert">
-        <span th:text="${updateMessage}">Product updated successfully!</span>
-    </div>
+				<!-- BREADCRUMB NAVIGATION -->
+				<div class="text-center position-relative">
+					<p class="text-white fs-6 mb-0 py-2" style="background-color: rgba(0,0,0,0.55); border-radius: 0;">
+						/ <a th:href="@{/home}" class="text-white">home</a>
+						/ <a th:href="@{/restaurantmanager}" class="text-white">restaurant manager</a>
+						/ <a th:href="@{'/restaurants/menu/admin/' + ${restaurant.id}}" class="text-white"
+							th:text="${restaurant.name}"></a>
+						/ <span>edit item</span>
+					</p>
+				</div>
 
-    <form th:action="@{/products/update}" th:object="${productModel}" method="post" enctype="multipart/form-data">
-
-        <!-- Hidden fields -->
-        <input type="hidden" th:field="*{id}" />
-        <input type="hidden" th:field="*{restaurantId}" />
-
-        <div class="mb-3">
-            <label for="name" class="form-label">Product Name</label>
-            <input type="text" th:field="*{name}" class="form-control" id="name" placeholder="Enter product name" required />
-        </div>
-
-        <div class="mb-3">
-            <label for="description" class="form-label">Description</label>
-            <textarea th:field="*{description}" class="form-control" id="description" rows="3" placeholder="Enter description" required></textarea>
-        </div>
-
-        <div class="mb-3">
-            <label for="price" class="form-label">Price ($)</label>
-            <input type="number" th:field="*{price}" class="form-control" id="price" placeholder="Enter price" step="0.01" required />
-        </div>
-
-		<!-- Image URL with Preview -->
-		<div class="mb-3 d-flex align-items-start">
-		    <div class="flex-grow-1 me-3">
-		        <label for="imageURL" class="form-label fw-bold">Image URL</label>
-		        <input type="text" id="imageURL" th:field="*{imageURL}" class="form-control"
-		               placeholder="http://localhost:8081/images/logo.png" oninput="showImagePreview()">
-		        <div class="text-danger" th:if="${#fields.hasErrors('imageURL')}" th:errors="*{imageURL}"></div>
-		    </div>
-
-		    <div id="previewContainer" style="width: 200px;">
-		        <img id="imagePreview" 
-		             src="/images/logo.png" 
-		             alt="Preview" 
-		             class="img-fluid border rounded" 
-		             style="max-height:150px; object-fit:contain;">
-		    </div>
+				<!-- HERO CONTENT-->
+				<div class="hero-content text-white pb-2">
+					<h1 class="display-5 fw-bold mx-auto px-4 py-2 w-75 w-md-50"
+						th:text="${restaurant.name} + ' Menu Admin'">Restaurant Name</h1>
+					<p class="mx-auto px-4 py-2 w-75 w-md-50">★ 4.5 (200+) • 25–30 min</p>
+					<div class="mx-auto px-4 py-2 w-75 w-md-50">
+						<p class="mb-0 small" th:text="${restaurant.description}">
+							Delicious handcrafted dishes made fresh daily.
+						</p>
+					</div>
+				</div>
+			</div>
 		</div>
 
-        <button type="submit" class="btn btn-primary">Update Product</button>
-        <a th:href="@{'/restaurants/menu/admin/' + ${productModel.restaurantId}}" class="btn btn-secondary ms-2">Cancel</a>
-    </form>
+		<!-- FORM SECTION -->
+		<div class="container py-5">
+			<h2>Edit Product - <span th:text="${productModel.name}">Product Name</span></h2>
+			<div th:if="${updateMessage}" class="alert alert-info mt-3" role="alert">
+				<span th:text="${updateMessage}">Product updated successfully!</span>
+			</div>
 
-</section>
+			<form th:action="@{/products/update}" th:object="${productModel}" method="post"
+				enctype="multipart/form-data">
+
+				<!-- Hidden fields -->
+				<input type="hidden" th:field="*{id}" />
+				<input type="hidden" th:field="*{restaurantId}" />
+
+				<div class="mb-3">
+					<label for="name" class="form-label">Product Name</label>
+					<input type="text" th:field="*{name}" class="form-control" id="name"
+						placeholder="Enter product name" required />
+				</div>
+
+				<div class="mb-3">
+					<label for="description" class="form-label">Description</label>
+					<textarea th:field="*{description}" class="form-control" id="description" rows="3"
+						placeholder="Enter description" required></textarea>
+				</div>
+
+				<div class="mb-3">
+					<label for="price" class="form-label">Price ($)</label>
+					<input type="number" th:field="*{price}" class="form-control" id="price" placeholder="Enter price"
+						step="0.01" required />
+				</div>
+
+				<!-- Image URL with Preview -->
+				<div class="mb-3 d-flex align-items-start">
+					<div class="flex-grow-1 me-3">
+						<label for="imageURL" class="form-label fw-bold">Image URL</label>
+						<input type="text" id="imageURL" th:field="*{imageURL}" class="form-control"
+							placeholder="http://localhost:8081/images/logo.png" oninput="showImagePreview()">
+						<div class="text-danger" th:if="${#fields.hasErrors('imageURL')}" th:errors="*{imageURL}"></div>
+					</div>
+
+					<div id="previewContainer" style="width: 200px;">
+						<img id="imagePreview" src="/images/logo.png" alt="Preview" class="img-fluid border rounded"
+							style="max-height:150px; object-fit:contain;">
+					</div>
+				</div>
+
+				<button type="submit" class="btn btn-primary">Update Product</button>
+				<a th:href="@{'/restaurants/menu/admin/' + ${productModel.restaurantId}}"
+					class="btn btn-secondary ms-2">Cancel</a>
+			</form>
+		</div>
+	</section>
 </body>
+
 </html>

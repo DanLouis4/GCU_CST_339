@@ -84,9 +84,17 @@ public class ProductController
              
             model.addAttribute("products", productService.findByRestaurantId(restaurantId));
             model.addAttribute("restaurantId", restaurantId);
+            model.addAttribute("restaurant", restaurant);
             model.addAttribute("restaurantName", restaurant.getName());
-            model.addAttribute("headerTemplate", "layouts/common-user");
-            return "restaurantmenuadmin";
+
+            // Add user info for personalization
+            model.addAttribute("username", userSession.getUsername());
+            model.addAttribute("firstName", userSession.getFirstName());     
+            
+            // Sets the correct navigation bar and layout
+	         model.addAttribute("headerTemplate", "layouts/common-user");
+
+	         return "restaurantmenuadmin";
         }
         catch (Exception e)
         {
@@ -123,7 +131,14 @@ public class ProductController
             product.setRestaurantId(restaurantId);
             model.addAttribute("productModel", product);
             model.addAttribute("restaurant", restaurant);
-            model.addAttribute("headerTemplate", "layouts/common-user");
+            
+            // Add user info for personalization
+            model.addAttribute("username", userSession.getUsername());
+            model.addAttribute("firstName", userSession.getFirstName());     
+            
+            // Sets the correct navigation bar and layout
+	         model.addAttribute("headerTemplate", "layouts/common-user");
+
             return "productnew";
         }
         catch (Exception e)
@@ -167,7 +182,15 @@ public class ProductController
             model.addAttribute("products", productService.findByRestaurantId(restaurant.getId()));
             model.addAttribute("restaurantId", restaurant.getId());
             model.addAttribute("restaurantName", restaurant.getName());
-            model.addAttribute("headerTemplate", "layouts/common-user");
+            model.addAttribute("restaurant", restaurant);
+            
+            // Add user info for personalization
+            model.addAttribute("username", userSession.getUsername());
+            model.addAttribute("firstName", userSession.getFirstName());     
+            
+            // Sets the correct navigation bar and layout
+	         model.addAttribute("headerTemplate", "layouts/common-user");
+
             
             // Redirect back to the restaurant's menu
             return "restaurantmenuadmin";
@@ -189,7 +212,15 @@ public class ProductController
             return "redirect:/error";
         }
         model.addAttribute("productModel", product);
-        model.addAttribute("headerTemplate", "layouts/common-user");
+        model.addAttribute("restaurant", restaurant);
+        
+        // Add user info for personalization
+        model.addAttribute("username", userSession.getUsername());
+        model.addAttribute("firstName", userSession.getFirstName());     
+        
+        // Sets the correct navigation bar and layout
+         model.addAttribute("headerTemplate", "layouts/common-user");
+
         return "productedit"; // must match the template file name
     }
 
@@ -209,6 +240,7 @@ public class ProductController
             productService.update(product);
             
             redirectAttributes.addFlashAttribute("updateMessage", "Product updated successfully!");
+            
 
             return "redirect:/restaurants/menu/admin/" + product.getRestaurantId();
 
@@ -259,7 +291,15 @@ public class ProductController
 	         model.addAttribute("products", productService.findByRestaurantId(restaurant.getId()));
 	         model.addAttribute("restaurantId", restaurant.getId());
 	         model.addAttribute("restaurantName", restaurant.getName());
-	         model.addAttribute("headerTemplate", "layouts/common-user");
+	         model.addAttribute("restaurant", restaurant);
+	         
+	            // Add user info for personalization
+	            model.addAttribute("username", userSession.getUsername());
+	            model.addAttribute("firstName", userSession.getFirstName());     
+	            
+	            // Sets the correct navigation bar and layout
+		         model.addAttribute("headerTemplate", "layouts/common-user");
+
 	         
 	         // Redirect back to the restaurant's menu
 	         return "restaurantmenuadmin";

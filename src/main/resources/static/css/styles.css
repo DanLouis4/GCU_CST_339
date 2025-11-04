@@ -262,6 +262,105 @@ main {
     text-align: right;
 }
 
+/* ================================
+   MENU GRID ENHANCEMENTS (Tiles + Hover)
+   ================================ */
+
+.menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+/* Each product tile */
+.menu-card {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: #fff;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    cursor: pointer;
+}
+
+.menu-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+}
+
+/* Product image */
+.menu-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+/* Hover overlay */
+.menu-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.4), rgba(0,0,0,0));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.menu-card:hover::before {
+    opacity: 1;
+}
+
+/* Card content */
+.menu-card .card-body {
+    padding: 1rem;
+    position: relative;
+    z-index: 2;
+}
+
+/* Text truncation */
+.menu-card .card-title {
+    font-size: 1.05rem;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.menu-card .card-text {
+    font-size: 0.9rem;
+    color: #6c757d;
+    height: 40px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Price alignment */
+.menu-card .price {
+    font-weight: bold;
+    color: #333;
+    text-align: right;
+}
+
+/* Admin buttons */
+.admin-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.admin-buttons .btn {
+    font-size: 0.75rem;
+    padding: 0.3rem 0.5rem;
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+    .menu-card img { height: 160px; }
+}
+
+@media (max-width: 576px) {
+    .menu-card img { height: 140px; }
+}
+
 @media (max-width: 992px) {
     .menu-card img { height: 180px; }
 }

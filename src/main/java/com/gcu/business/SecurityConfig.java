@@ -1,104 +1,76 @@
 package com.gcu.business;
 
-import org.springframework.boot.CommandLineRunner;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.stereotype.Component;
 
-import static org.springframework.security.config.Customizer.withDefaults;
-
-/**
- * SecurityConfig
- * -----------------------------------------
- * Configures:
- * - Basic Auth for REST API (/api/**)
- * - Form login for web pages
- */
 @Configuration
+@EnableWebSecurity
 public class SecurityConfig {
 
-    @Bean
-    public DatabaseUserDetailsService userDetailsService() {
-        return new DatabaseUserDetailsService();
-    }
+    @Autowired
+    private AuthenticationSuccessListener authenticationSuccessListener;
 
+    /* ---------- shared beans ---------- */
     @Bean
-    public AuthenticationManager authenticationManager(
-            AuthenticationConfiguration authConfig) throws Exception {
-        return authConfig.getAuthenticationManager();
-    }
-
-    @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
     @Bean
-    public DaoAuthenticationProvider authenticationProvider(
-            DatabaseUserDetailsService userDetailsService,
-            BCryptPasswordEncoder encoder) {
-
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setUserDetailsService(userDetailsService);
-        provider.setPasswordEncoder(encoder);
-        return provider;
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
     }
 
-    @Component
-    public class PasswordPrinter implements CommandLineRunner {
-        @Override
-        public void run(String... args) throws Exception {
-            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-            String hashed = encoder.encode("testpassword");
-            System.out.println("🔐 Hashed password: " + hashed);
-        }
-    }
-
+    /* ---------- 1. UI / web filter chain (runs first) ---------- */
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-
+    public SecurityFilterChain webFilterChain(HttpSecurity http) throws Exception {
         http
-            // Disable CSRF for API testing convenience
+            .securityMatcher("/**")                   // everything except /api/**
             .csrf(csrf -> csrf.disable())
-
-            // --- Authorization Rules ---
             .authorizeHttpRequests(auth -> auth
-
-                // Public pages
-                .requestMatchers("/", "/signup", "/signin", "/css/**", "/js/**", "/images/**", "/videos/**")
-                .permitAll()
-
-                // Require login for API & secure pages
-                .requestMatchers("/api/**").authenticated()
+                .requestMatchers("/", "/signin", "/signup",
+                                 "/css/**", "/fonts/**", "/js/**", "/images/**", "/videos/**").permitAll()
                 .anyRequest().authenticated()
             )
-
-            // Add Form Login for web users
             .formLogin(form -> form
                 .loginPage("/signin")
                 .loginProcessingUrl("/signin")
-                .defaultSuccessUrl("/home", true)
+                .successHandler(authenticationSuccessListener)
                 .failureUrl("/signin?error=true")
                 .permitAll()
             )
-
-            //  Logout setup
             .logout(logout -> logout
-                .logoutUrl("/logout")
-                .logoutSuccessUrl("/")
+                .logoutUrl("/signout")
+                .logoutSuccessUrl("/signin?logout=true")
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID")
                 .permitAll()
             )
-        
-            //  Add Basic Authentication for REST API
-            .httpBasic(withDefaults());
+            .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED));
+
+        return http.build();
+    }
+
+    /* ---------- 2. API filter chain (Basic Auth only) ---------- */
+    @Bean
+    public SecurityFilterChain apiFilterChain(HttpSecurity http) throws Exception {
+        http
+            .securityMatcher("/api/**")               // applies only to REST endpoints
+            .csrf(csrf -> csrf.disable())
+            .authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
+            .httpBasic(basic -> {})                   // keep Basic Auth active for Postman
+            .sessionManagement(sess ->
+                sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            );
 
         return http.build();
     }

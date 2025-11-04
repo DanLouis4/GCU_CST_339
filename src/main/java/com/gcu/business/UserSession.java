@@ -1,20 +1,21 @@
 package com.gcu.business;
 
+
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.annotation.SessionScope;
+import org.springframework.web.context.WebApplicationContext;
+
+import jakarta.annotation.PreDestroy;
 
 /**
- * UserSession
- * ----------------------------
  * Maintains the active user's session data across requests.
  * This version includes a tokenized password representation
  * for display purposes only (never the real password).
  */
-
 @Component
-@SessionScope
-public class UserSession
-{
+@Scope(value = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
+public class UserSession {
     // ----------------------------
     // Fields
     // ----------------------------
@@ -154,7 +155,9 @@ public class UserSession
     /**
      * Clears all session data. Called when user logs out or session ends.
      */
+    @PreDestroy
     public void clear() {
+    	this.id = 0;
         this.username = null;
         this.firstName = null;
         this.lastName = null;

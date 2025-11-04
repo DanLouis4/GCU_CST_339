@@ -13,6 +13,7 @@
 package com.gcu.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +21,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import com.gcu.business.UserProfileServiceInterface;
 import com.gcu.business.UserSession;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
 public class UserProfileController {
@@ -36,6 +39,10 @@ public class UserProfileController {
      */
     @GetMapping("/userprofile")
     public String displayUserProfile(Model model) {
+    	
+    	System.out.println("The last name is " + userSession.getLastName());
+    	System.out.println("The email is " + userSession.getEmail());
+    	
         model.addAttribute("username", userSession.getUsername());
         model.addAttribute("firstName", userSession.getFirstName());
         model.addAttribute("lastName", userSession.getLastName());
@@ -50,8 +57,10 @@ public class UserProfileController {
      * Redirects to the sign-in page.
      */
     @GetMapping("/signout")
-    public String signOut() {
-        profileService.logout();
-        return "redirect:/signin";
+    public String signout(HttpServletRequest request) {
+        userSession.clear(); // same method as above
+        request.getSession().invalidate();
+        SecurityContextHolder.clearContext();
+        return "redirect:/signin?logout=true";
     }
 }

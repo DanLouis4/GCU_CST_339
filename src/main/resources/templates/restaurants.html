@@ -6,8 +6,16 @@
     <title>Restaurants</title>
 </head>
 <body>
-<section layout:fragment="content" class="container mt-5 mb-5">
-
+<section layout:fragment="content" class="container mt-0 mb-5">
+	
+	<!-- BREADCRUMB NAVIGATION -->
+	<div class="text-center mt-0 mb-5">
+	    <p class="fs-6 mt-0 mb-0 py-2">
+	        / <a th:href="@{/home}">home</a>
+	        <span> / restaurants</span>
+	    </p>
+	</div>
+	
     <!-- RESTAURANT CARDS -->
     <div th:if="${restaurants != null}">
         <div th:each="restaurant : ${restaurants}" 

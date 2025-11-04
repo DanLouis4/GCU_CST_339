@@ -11,9 +11,18 @@
 
     <!-- HERO SECTION -->
     <div class="container-fluid p-0 m-0">
-        <div class="hero"
-             th:style="'background-image: url(' + ${restaurant.imageURL} + ');'">
-            <div class="hero-content text-white">
+        <div class="hero" th:style="'background-image: url(' + ${restaurant.imageURL} + ');'">
+
+			<!-- BREADCRUMB NAVIGATION -->
+			<div class="text-center position-relative">
+			    <p class="text-white fs-6 mb-0 py-2"
+			       style="background-color: rgba(0,0,0,0.25); border-radius: 0;">
+			        / <a th:href="@{/home}" class="text-white">home</a>
+			        / <a th:href="@{/restaurants}" class="text-white">restaurants</a>
+			        <span th:text="' / ' + ${restaurant.name} + ' Menu'"></span>
+			    </p>
+			</div>					 
+            <div class="hero-content text-white pb-2">
                 <h1 class="display-5 fw-bold mx-auto px-4 py-2 w-75 w-md-50" th:text="${restaurant.name}">Restaurant Name</h1>
                 <p class="mx-auto px-4 py-2 w-75 w-md-50">★ 4.5 (200+) • 25–30 min</p>
                 <div class="mx-auto px-4 py-2 w-75 w-md-50">
@@ -30,8 +39,8 @@
 				<span th:text="${restaurant.address}">Address</span>&nbsp;★&nbsp;
 				<span th:text="${restaurant.phone}">Phone</span>
 			</p>	
-		</div>
-		
+		</div> 
+	
 	</div>
     <!-- MENU GRID SECTION -->
     <div class="container py-5">
